@@ -1,13 +1,20 @@
-from pydantic import BaseModel
+from typing import Optional
+from pydantic import BaseModel, Field
+class BrandCreate(BaseModel):
+    name_brand: str = Field(..., max_length=50)
+    
+    class Config:
+        from_attributes = True
 
-class BrandBase(BaseModel):
+class BrandUpdate(BaseModel):
+    name_brand: Optional[str] = Field(None, max_length=50)
+    
+    class Config:
+        from_attributes = True
+
+class BrandResponse(BaseModel):
+    id_brand: int
     name_brand: str
 
-class BrandCreate(BrandBase):
-    pass
-
-class Brand(BrandBase):
-    id_brand: int
-
     class Config:
-        orm_mode = True
+        from_attributes = True
