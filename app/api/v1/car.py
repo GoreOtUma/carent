@@ -2,7 +2,6 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, DateTime
 from crud import car as CarService
 from db.session import get_session
 from schemas.car import CarCreate, CarResponse, CarUpdate
@@ -20,13 +19,11 @@ async def create_car(
 async def get_all_cars(
     skip: int = 0,
     limit: int = 100,
-    is_active: Optional[bool] = None,
     db: AsyncSession = Depends(get_session)
 ):
-    cars = await CarService.get_all_cars(db)
-    if is_active is not None:
-        cars = [car for car in cars if car.is_active == is_active]
-    return cars[skip:skip+limit]
+    cars = await CarService.get_all_cars(db, skip=skip, limit=limit)
+    return cars
+
 
 @router.get("/cars/{car_id}", response_model=CarResponse, summary="Получение автомобиля по ID", tags=["Автомобили"])
 async def get_car(
@@ -51,8 +48,8 @@ async def update_car(
 
 @router.get("/available-cars", response_model=List[CarResponse], summary="Получение доступных автомобилей", tags=["Автомобили"])
 async def get_available_cars(
-    start_date: Optional[datetime] = None,
-    end_date: Optional[datetime] = None,
+    skip: int = 0,
+    limit: int = 100,
     db: AsyncSession = Depends(get_session)
 ):
-    return await CarService.get_available_cars(db, start_date, end_date)
+    return await CarService.get_available_cars(db, skip=skip, limit=limit)

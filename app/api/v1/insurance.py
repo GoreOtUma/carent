@@ -20,7 +20,7 @@ async def get_all_insurances(
     limit: int = 100,
     db: AsyncSession = Depends(get_session)
 ):
-    return await InsuranceService.get_all_insurances(db)[skip:skip+limit]
+    return await InsuranceService.get_all_insurances(db, skip=skip, limit=limit)
 
 @router.get("/insurances/{insurance_id}", response_model=InsuranceResponse, summary="Получение страховки по ID", tags=["Страховки"])
 async def get_insurance(

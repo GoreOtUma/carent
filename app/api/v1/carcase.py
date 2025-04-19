@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from crud import carcase as CarcaseService
 from db.session import get_session
@@ -16,8 +16,9 @@ async def create_carcase(
 
 @router.get("/carcases", response_model=List[CarcaseResponse], summary="Получение всех типов кузовов", tags=["Кузова"])
 async def get_all_carcases(
-    skip: int = 0,
-    limit: int = 100,
+    skip: int = Query(0, description="Пропуск записей"),
+    limit: int = Query(100, description="Лимит записей"),
     db: AsyncSession = Depends(get_session)
 ):
-    return await CarcaseService.get_all_carcases(db)[skip:skip+limit]
+    carcases = await CarcaseService.get_all_carcases(db, skip=skip, limit=limit)
+    return carcases

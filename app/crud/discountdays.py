@@ -2,16 +2,13 @@ from typing import List, Optional
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import selectinload
 from models.user import DiscountDays
 from schemas.discountdays import DiscountDaysCreate
 
 async def create_discount(data: DiscountDaysCreate, db: AsyncSession) -> DiscountDays:
     discount = DiscountDays(
         count_day=data.count_day,
-        day_from=data.day_from,
-        day_to=data.day_to,
-        costf=data.costf
+        coeff=data.coeff
     )
     
     try:
@@ -43,9 +40,7 @@ async def update_discount(discount_id: int, data: DiscountDaysCreate, db: AsyncS
         return None
     
     discount.count_day = data.count_day
-    discount.day_from = data.day_from
-    discount.day_to = data.day_to
-    discount.costf = data.costf
+    discount.costf = data.coeff
     
     try:
         await db.commit()

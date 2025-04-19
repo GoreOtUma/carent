@@ -27,8 +27,13 @@ async def get_brand(brand_id: int, db: AsyncSession) -> Optional[Brand]:
     )
     return result.scalar_one_or_none()
 
-async def get_all_brands(db: AsyncSession) -> List[Brand]:
-    result = await db.execute(select(Brand))
+async def get_all_brands(db: AsyncSession, skip: int = 0, limit: int = 100) -> List[Brand]:
+    result = await db.execute(
+        select(Brand)
+        .offset(skip)
+        .limit(limit)
+        .order_by(Brand.id_brand)
+    )
     return result.scalars().all()
 
 async def update_brand(brand_id: int, data: BrandUpdate, db: AsyncSession) -> Optional[Brand]:

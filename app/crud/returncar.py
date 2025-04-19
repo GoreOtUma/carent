@@ -2,7 +2,6 @@ from typing import List, Optional
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import selectinload
 from models.user import ReturnCar
 from schemas.returncar import ReturnCarCreate, ReturnCarUpdate
 
@@ -16,7 +15,7 @@ async def create_return_car(db: AsyncSession, return_data: ReturnCarCreate):
 async def get_return_car(db: AsyncSession, return_id: int):
     result = await db.execute(
         select(ReturnCar)
-        .where(ReturnCar.id_return == return_id)
+        .where(ReturnCar.id_ret == return_id)
     )
     return result.scalar_one_or_none()
 

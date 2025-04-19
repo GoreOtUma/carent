@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from crud import user as UserService
 from db.session import get_session
@@ -29,7 +29,7 @@ async def get_all_users(
     limit: int = 100,
     db: AsyncSession = Depends(get_session)
 ):
-    return await UserService.get_all_users(db)[skip:skip+limit]
+    return await UserService.get_all_users(db, skip=skip, limit=limit)
 
 @router.put("/users/{user_id}", response_model=UserResponse, summary="Обновление пользователя", tags=["Пользователи"])
 async def update_user(

@@ -2,8 +2,8 @@ from typing import List, Optional
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import selectinload
-from models.user import Contract
+from sqlalchemy.orm import selectinload, joinedload
+from models.user import Contract, Car
 from schemas.contract import ContractCreate, ContractUpdate
 
 
@@ -14,7 +14,7 @@ async def create_contract(data: ContractCreate, db: AsyncSession) -> Contract:
         start_date=data.start_date,
         end_date=data.end_date,
         total_cost=data.total_cost,
-        id_insurance=data.id_insurance,
+        id_ins=data.id_ins,
         status=data.status
     )
     
@@ -35,7 +35,10 @@ async def get_user_contracts(user_id: int, db: AsyncSession) -> List[Contract]:
         select(Contract)
         .options(
             selectinload(Contract.user),
-            selectinload(Contract.car),
+            selectinload(Contract.car).selectinload(Car.model),
+            selectinload(Contract.car).selectinload(Car.fuel),
+            selectinload(Contract.car).selectinload(Car.transmission),
+            selectinload(Contract.car).selectinload(Car.carcase),
             selectinload(Contract.insurance)
         )
         .where(Contract.id_user == user_id)
@@ -47,10 +50,13 @@ async def get_contract(contract_id: int, db: AsyncSession) -> Optional[Contract]
         select(Contract)
         .options(
             selectinload(Contract.user),
-            selectinload(Contract.car),
+            selectinload(Contract.car).selectinload(Car.model),
+            selectinload(Contract.car).selectinload(Car.fuel),
+            selectinload(Contract.car).selectinload(Car.transmission),
+            selectinload(Contract.car).selectinload(Car.carcase),
             selectinload(Contract.insurance)
         )
-        .where(Contract.id_contract == contract_id)
+        .where(Contract.id_contr == contract_id)
     )
     return result.scalar_one_or_none()
 

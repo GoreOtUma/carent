@@ -4,43 +4,42 @@ from schemas.model import ModelResponse
 from schemas.transmission import TransmissionResponse
 from schemas.fuel import FuelResponse
 from schemas.carcase import CarcaseResponse
-from schemas.priceseason import PriceSeasonResponse
 
 class CarCreate(BaseModel):
-    png_number: str = Field(..., max_length=50)
+    gos_number: str = Field(..., max_length=50)
     id_model: int
-    year: str = Field(..., max_length=4)
+    year: int
     id_trans: int
     id_fuel: int
     id_carcase: int
-    trunk_volume: str = Field(..., max_length=5)
-    engine_volume: str = Field(..., max_length=4)
-    seating_capacity: str = Field(..., max_length=2)
+    trunk_volume: int
+    engine_volume: int
+    seating_capacity: int
     color: str = Field(..., max_length=50)
     mileage: int
     description: Optional[str] = None
     cost_day: int
-    is_active: bool = True
+    is_rented: bool = True
     image_path: Optional[str] = Field(None, max_length=255)
     
     class Config:
         from_attributes = True
 
 class CarUpdate(BaseModel):
-    png_number: Optional[str] = Field(None, max_length=50)
+    gos_number: Optional[str] = Field(None, max_length=50)
     id_model: Optional[int] = None
-    year: Optional[str] = Field(None, max_length=4)
+    year: Optional[int] = None
     id_trans: Optional[int] = None
     id_fuel: Optional[int] = None
     id_carcase: Optional[int] = None
-    trunk_volume: Optional[str] = Field(None, max_length=5)
-    engine_volume: Optional[str] = Field(None, max_length=4)
-    seating_capacity: Optional[str] = Field(None, max_length=2)
+    trunk_volume: Optional[int] = None
+    engine_volume: Optional[int] = None
+    seating_capacity: Optional[int] = None
     color: Optional[str] = Field(None, max_length=50)
     mileage: Optional[int] = None
     description: Optional[str] = None
     cost_day: Optional[int] = None
-    is_active: Optional[bool] = None
+    is_rented: Optional[bool] = None
     image_path: Optional[str] = Field(None, max_length=255)
     
     class Config:
@@ -48,22 +47,21 @@ class CarUpdate(BaseModel):
 
 class CarResponse(BaseModel):
     id_car: int
-    png_number: str
+    gos_number: str
     model: ModelResponse
-    year: str
+    year: int
     transmission: TransmissionResponse
     fuel: FuelResponse
     carcase: CarcaseResponse
-    trunk_volume: str
-    engine_volume: str
-    seating_capacity: str
+    trunk_volume: int
+    engine_volume: int
+    seating_capacity: int
     color: str
     mileage: int
     description: Optional[str]
     cost_day: int
-    is_active: bool
+    is_rented: bool
     image_path: Optional[str]
-    price_seasons: List[PriceSeasonResponse] = []
 
     class Config:
         from_attributes = True

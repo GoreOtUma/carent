@@ -2,7 +2,6 @@ from typing import List
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import selectinload
 from models.user import PriceSeason
 from schemas.priceseason import PriceSeasonCreate, PriceSeasonUpdate
 
@@ -16,16 +15,9 @@ async def create_price_season(db: AsyncSession, season_data: PriceSeasonCreate):
 async def get_price_season(db: AsyncSession, season_id: int):
     result = await db.execute(
         select(PriceSeason)
-        .where(PriceSeason.id_season == season_id)
+        .where(PriceSeason.id_ps == season_id)
     )
     return result.scalar_one_or_none()
-
-async def get_car_seasons(db: AsyncSession, car_id: int):
-    result = await db.execute(
-        select(PriceSeason)
-        .where(PriceSeason.id_car == car_id)
-    )
-    return result.scalars().all()
 
 async def update_price_season(db: AsyncSession, season_id: int, update_data: PriceSeasonUpdate):
     season = await get_price_season(db, season_id)

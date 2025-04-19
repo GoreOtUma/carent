@@ -40,9 +40,11 @@ async def get_models_by_brand(brand_id: int, db: AsyncSession) -> List[Model]:
     )
     return result.scalars().all()
 
-async def get_all_models(db: AsyncSession) -> List[Model]:
+async def get_all_models(db: AsyncSession, skip: int = 0, limit: int = 100) -> List[Model]:
     result = await db.execute(
         select(Model)
+        .offset(skip)
+        .limit(limit)
         .options(selectinload(Model.brand))
     )
-    return result.scalars().all()
+    return result.scalars().all() 

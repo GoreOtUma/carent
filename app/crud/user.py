@@ -3,15 +3,18 @@ from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from fastapi import HTTPException, status
-from sqlalchemy.orm import selectinload
 from models.user import User
 from schemas.user import UserCreate, UserUpdate
 
 async def create_user(data: UserCreate, db: AsyncSession) -> User:
     user = User(
+        f_name=data.f_name,
         name=data.name,
+        l_name=data.l_name,
         telephone=data.telephone,
-        passport=data.passport,
+        n_passport=data.n_passport,
+        n_vu=data.n_vu,
+        s_passport=data.s_passport,
         email=data.email,
         password=data.password, 
         role=data.role
@@ -43,8 +46,11 @@ async def get_user(user_id: int, db: AsyncSession) -> Optional[User]:
     )
     return result.scalar_one_or_none()
 
-async def get_all_users(db: AsyncSession) -> List[User]:
-    result = await db.execute(select(User))
+async def get_all_users(db: AsyncSession, skip: int = 0, limit: int = 100) -> List[User]:
+    result = await db.execute(
+        select(User)
+        .offset(skip)
+        .limit(limit))
     return result.scalars().all()
 
 async def update_user(user_id: int, data: UserUpdate, db: AsyncSession) -> Optional[User]:

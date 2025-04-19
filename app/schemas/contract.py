@@ -12,7 +12,7 @@ class ContractCreate(BaseModel):
     start_date: datetime
     end_date: datetime
     total_cost: float
-    id_insurance: int
+    id_ins: int
     status: str = Field("active", max_length=50)
     
     class Config:
@@ -24,14 +24,14 @@ class ContractUpdate(BaseModel):
     start_date: Optional[datetime] = None
     end_date: Optional[datetime] = None
     total_cost: Optional[float] = None
-    id_insurance: Optional[int] = None
+    id_ins: Optional[int] = None
     status: Optional[str] = Field(None, max_length=50)
     
     class Config:
         from_attributes = True
 
 class ContractResponse(BaseModel):
-    id_contract: int
+    id_contr: int
     user: UserResponse
     car: CarResponse
     start_date: datetime

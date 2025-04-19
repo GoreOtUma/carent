@@ -2,7 +2,6 @@ from typing import List, Optional
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import selectinload
 from models.user import Fuel
 from schemas.fuel import FuelCreate
 
@@ -29,8 +28,11 @@ async def get_fuel(fuel_id: int, db: AsyncSession) -> Optional[Fuel]:
     )
     return result.scalar_one_or_none()
 
-async def get_all_fuels(db: AsyncSession) -> List[Fuel]:
-    result = await db.execute(select(Fuel))
+async def get_all_fuels(db: AsyncSession, skip: int = 0, limit: int = 100) -> List[Fuel]:
+    result = await db.execute(
+        select(Fuel)
+        .offset(skip)
+        .limit(limit))
     return result.scalars().all()
 
 async def update_fuel(fuel_id: int, data: FuelCreate, db: AsyncSession) -> Optional[Fuel]:

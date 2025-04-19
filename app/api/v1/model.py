@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from crud import model as ModelService
 from db.session import get_session
@@ -16,11 +16,12 @@ async def create_model(
 
 @router.get("/models", response_model=List[ModelResponse], summary="Получение всех моделей", tags=["Модели"])
 async def get_all_models(
-    skip: int = 0,
-    limit: int = 100,
+    skip: int = Query(0, description="Пропуск записей"),
+    limit: int = Query(100, description="Лимит записей"),
     db: AsyncSession = Depends(get_session)
 ):
-    return await ModelService.get_all_models(db)[skip:skip+limit]
+    models = await ModelService.get_all_models(db, skip=skip, limit=limit)
+    return models
 
 @router.get("/brands/{brand_id}/models", response_model=List[ModelResponse], summary="Получение моделей по бренду", tags=["Модели"])
 async def get_models_by_brand(

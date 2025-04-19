@@ -3,9 +3,7 @@ from pydantic import BaseModel, Field
 
 class DiscountDaysCreate(BaseModel):
     count_day: int
-    day_from: str = Field(..., max_length=5)
-    day_to: str = Field(..., max_length=5)
-    costf: float
+    coeff: float
     
     class Config:
         from_attributes = True
@@ -13,9 +11,7 @@ class DiscountDaysCreate(BaseModel):
 class DiscountDaysResponse(BaseModel):
     id_discount: int
     count_day: int
-    day_from: str
-    day_to: str
-    costf: float
+    coeff: float
 
     class Config:
         from_attributes = True

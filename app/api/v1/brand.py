@@ -20,7 +20,8 @@ async def get_all_brands(
     limit: int = Query(100, description="Лимит записей"),
     db: AsyncSession = Depends(get_session)
 ):
-    return await BrandService.get_all_brands(db)[skip:skip+limit]
+    brands = await BrandService.get_all_brands(db, skip=skip, limit=limit)
+    return brands
 
 @router.get("/brands/{brand_id}", response_model=BrandResponse, summary="Получение бренда по ID", tags=["Бренды"])
 async def get_brand(

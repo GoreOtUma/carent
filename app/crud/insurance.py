@@ -7,7 +7,7 @@ from schemas.insurance import InsuranceCreate
 
 async def create_insurance(data: InsuranceCreate, db: AsyncSession) -> Insurance:
     insurance = Insurance(
-        type_in=data.type_in,
+        type_ins=data.type_ins,
         cost=data.cost
     )
     
@@ -23,13 +23,16 @@ async def create_insurance(data: InsuranceCreate, db: AsyncSession) -> Insurance
         )
     return insurance
 
-async def get_insurance(insurance_id: int, db: AsyncSession) -> Optional[Insurance]:
+async def get_insurance(ins_id: int, db: AsyncSession) -> Optional[Insurance]:
     result = await db.execute(
         select(Insurance)
-        .where(Insurance.id_insurance == insurance_id)
+        .where(Insurance.id_ins == ins_id)
     )
     return result.scalar_one_or_none()
 
-async def get_all_insurances(db: AsyncSession) -> List[Insurance]:
-    result = await db.execute(select(Insurance))
+async def get_all_insurances(db: AsyncSession, skip: int = 0, limit: int = 100) -> List[Insurance]:
+    result = await db.execute(
+        select(Insurance)
+        .offset(skip)
+        .limit(limit))
     return result.scalars().all()

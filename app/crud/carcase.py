@@ -2,12 +2,11 @@ from typing import List, Optional
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import selectinload
 from models.user import Carcase
 from schemas.carcase import CarcaseCreate
 
 async def create_carcase(data: CarcaseCreate, db: AsyncSession) -> Carcase:
-    carcase = carcase(name_carcase=data.name_carcase)
+    carcase = Carcase(name_carcase=data.name_carcase)
     
     try:
         db.add(carcase)
@@ -28,6 +27,9 @@ async def get_carcase(carcase_id: int, db: AsyncSession) -> Optional[Carcase]:
     )
     return result.scalar_one_or_none()
 
-async def get_all_carcases(db: AsyncSession) -> List[Carcase]:
-    result = await db.execute(select(Carcase))
+async def get_all_carcases(db: AsyncSession, skip: int = 0, limit: int = 100) -> List[Carcase]:
+    result = await db.execute(
+        select(Carcase)
+        .offset(skip)
+        .limit(limit))
     return result.scalars().all()
