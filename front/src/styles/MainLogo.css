@@ -1,0 +1,46 @@
+@media screen and (max-width: 767px) {
+    .headline-carent {
+        justify-content: center;
+    }  
+
+    .carent-text {
+        display: none !important;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .authorized-logo {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .carent-text {
+        font-size: 20px;
+    }
+}
+
+@media screen and (min-width: 1025px) {
+    .carent-text {
+        font-size: 22px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .carent-text {
+        font-size: 28px;
+    }
+}
+
+.carent-text {
+    color: #10141A;
+    text-transform: uppercase;
+}
+
+.headline-carent {
+    display: flex;
+    gap: 16px;
+}
+.carent-logo{
+    width: 100px;
+}

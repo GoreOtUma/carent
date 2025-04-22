@@ -1,0 +1,167 @@
+.registration-page {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 48px;
+    width: 100%;
+}
+
+.sign-in {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+    max-width: 400px;
+}
+  
+.sign-in__message {
+    margin-bottom: 24px;
+    text-align: center;
+}
+  
+.main-message {
+    color: #1436E0;
+    font-size: 28px;
+  margin: 0;
+}
+  
+.additional-message {
+    font-size: 22px;
+    margin: 0;
+}
+  
+.sign-in__inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+  
+.email-input,
+.password-input {
+    display: flex;
+    flex-direction: column;
+}
+  
+.label {
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+  
+.additionally {
+    align-items: center;
+    color: #10141A;
+    display: flex;
+    font-size: 14px;
+    justify-content: space-between;
+}
+  
+.forgot-password {
+    color: #B3B3B3;
+    cursor: pointer;
+}
+  
+.to-sign-up, .to-sign-in {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    gap: 12px;
+    text-align: center;
+}
+
+@media screen and (max-width: 767px) {
+    .sign-in {
+      padding: 20px;
+      width: 100%;
+    }
+
+    .additional-message {
+        display: none;
+    }
+    
+    .buttons {
+        margin-top: 24px;
+    }
+
+    .registration {
+        align-content: center;
+        max-width: 380px;
+        width: 100%;
+    }
+
+    .registration-page {
+        justify-content: center;
+    }
+
+    .to-sign-up, .to-sign-in {
+        flex-direction: unset;
+        gap: 6px;
+        justify-content: center;
+    }
+
+    .main-message {
+        text-align: center;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .buttons {
+        margin-top: 48px;
+    }
+
+    .registration {
+        max-width: 600px;
+        width: 50%;
+    }
+
+    .main-message {
+        color: #10141A;
+    }
+}
+  
+@media screen and (min-width: 1024px) {
+    .sign-in {
+      margin-left: 5%;
+      margin-top: 10%;
+    }
+
+    .main-message {
+        font-size: 48px;
+    }
+
+    .additional-message {
+        font-size: 28px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .main-message {
+        font-size: 54px;
+    }
+
+    .additional-message {
+        font-size: 32px;
+    }
+}
+
+.registration__inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.menu-header__item {
+    cursor: pointer;
+}
+
+.registration {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 48px;
+}
+
+.registration__message {
+    display: grid;
+    gap: 12px;
+}
