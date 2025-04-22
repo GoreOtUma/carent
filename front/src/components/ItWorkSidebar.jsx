@@ -1,5 +1,5 @@
 import React from 'react';
-import imageItWork from '../assets/carent.jpg';
+import imageItWork from '../assets/carent.png';
 
 export const ItWorkSidebar = () => {
   return (

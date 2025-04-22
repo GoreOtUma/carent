@@ -18,7 +18,7 @@ const SignIn = () => {
 
 
   const login = async (data) => {
-    const payload = {login_or_email: data.login_or_email,password: data.password}
+    const payload = {login_or_email: data.email,password: data.password}
     
     try {
       const response = await api.post("auth", payload);
@@ -38,7 +38,6 @@ const SignIn = () => {
         localStorage.setItem("user_role", userRole);
         localStorage.setItem("user_id", userId);
         localStorage.setItem("email", userData?.email);
-        localStorage.setItem("login", userData?.login);
   
         setUser({ name: fullName, role: userRole });
         navigate('/mainpage');
@@ -59,8 +58,8 @@ const SignIn = () => {
     <div className="registration-page">
       <div className="registration">
         <div className="registration__message">
-          <p className="main-message">С возвращением <br></br>к команде ТМПК!</p>
-          <p className="additional-message secondary-text ">Работа может быть в удовольствие</p>
+          <p className="main-message"> <br></br></p>
+          <p className="additional-message secondary-text "></p>
         </div>
 
         {errorMessage && <p style={{ color: "red", marginBottom: "1rem" }}>{errorMessage}</p>}
@@ -69,9 +68,9 @@ const SignIn = () => {
           <div className="email-input">
             <MyInput
               id="login_or_email"
-              placeholder="Введите email или логин"
+              placeholder="Введите email"
               type="text"
-              label="Email или логин"
+              label="Email"
               {...register("login_or_email", {
                 required: "Поле обязательно для заполнения",
               })}
