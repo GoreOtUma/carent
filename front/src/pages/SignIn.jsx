@@ -18,7 +18,7 @@ const SignIn = () => {
 
 
   const login = async (data) => {
-    const payload = {login_or_email: data.email,password: data.password}
+    const payload = {email: data.email,password: data.password}
     
     try {
       const response = await api.post("auth", payload);

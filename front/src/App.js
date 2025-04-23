@@ -5,6 +5,9 @@ import { AuthProvider } from './context/AuthContext';
 import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn';
 import MainPage from './pages/MainPage';
+import Contract from './pages/Contract'
+import ArchiveUser from './pages/ArchiveUser'
+import Profile from './pages/Profile';
 import PrivateRoute from './components/PrivateRoute';
 
 function App() {
@@ -13,15 +16,12 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Navigate to="/mainpage" />} />
-
-          {/* Публичные страницы */}
           <Route path="/signin" element={<Layout><SignIn /></Layout>} />
-          <Route path="/signup" element={<Layout><SignUp /></Layout>} />
-
-          {/* Приватные страницы */}
-          <Route path="/mainpage" element={<PrivateRoute><Layout><MainPage /></Layout></PrivateRoute>} />
-          
-          {/* Остальные страницы аналогично */}
+          <Route path="/signup" element={<Layout><SignUp /></Layout>} />   
+          <Route path="/mainpage" element={<Layout><MainPage /></Layout>} /> 
+          <Route path="/contract" element={<Layout><Contract /></Layout>} />
+          <Route path="/profile" element={<Layout><Profile/></Layout>}/>
+          <Route path="/archive_user" element={<Layout><ArchiveUser /></Layout>} />  
         </Routes>
       </Router>
     </AuthProvider>

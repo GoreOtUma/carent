@@ -1,0 +1,10 @@
+.info-blocks {
+    align-items:center;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.profile-page {
+    padding: 20px;
+}

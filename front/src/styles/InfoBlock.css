@@ -1,0 +1,32 @@
+.info-block {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(94, 94, 94, 0.2);
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    gap: 8px;
+    max-width: 560px;
+    padding: 6px;
+    width: 100%;
+}
+  
+.info__header {
+    display: flex;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.info__body {
+    font-size: 14px;
+}
+
+@media screen and (min-width: 768px) {
+    .info__body {
+        font-size: 16px;
+    }
+    
+    .info__header {
+        font-size: 20px;
+    }
+}

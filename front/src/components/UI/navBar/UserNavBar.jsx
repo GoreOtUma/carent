@@ -12,7 +12,7 @@ const UserNavBar = () => {
       <div className="menu-header__item" onClick={() => navigate('/profile')}>
         <div className="menu-header__text">Профиль</div>
       </div>
-      <div className="menu-header__item" onClick={() => navigate('/archive')}>
+      <div className="menu-header__item" onClick={() => navigate('/archive_user')}>
         <div className="menu-header__text">Архив</div>
       </div>
     </>
