@@ -1,7 +1,18 @@
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
 
-class UserCreate(BaseModel):
+class UserBase(BaseModel):
+    f_name: str
+    name: str
+    l_name: str
+    telephone: int
+    n_passport: int
+    n_vu: int
+    s_passport: int
+    email: EmailStr
+    role: str
+
+class UserCreate(UserBase):
     f_name: str = Field(..., max_length=50, description="Фамилия пользователя")
     name: str = Field(..., max_length=50, description="Имя пользователя")
     l_name: str = Field(..., max_length=50, description="Отчество пользователя")
@@ -17,31 +28,23 @@ class UserCreate(BaseModel):
         from_attributes = True
 
 class UserUpdate(BaseModel):
-    f_name: Optional[str] = Field(None, max_length=50, description="Фамилия пользователя")
-    name: Optional[str] = Field(None, max_length=50, description="Имя пользователя")
-    l_name: Optional[str] = Field(None, max_length=50, description="Отчество пользователя")
-    telephone: Optional[int] = Field(None, description="Номер телефона")
-    n_passport: Optional[int] = Field(None, description="Серия паспорта")
-    s_passport: Optional[int] = Field(None, description="Номер паспорта")
-    n_vu: Optional[int] = Field(None, description="Номер водительского удостоверения")
-    email: Optional[EmailStr] = Field(None, description="Email пользователя")
-    password: Optional[str] = Field(None, max_length=255, description="Пароль")
-    role: Optional[str] = Field(None, max_length=50, description="Роль пользователя")
+    f_name: Optional[str]
+    name: Optional[str]
+    l_name: Optional[str]
+    telephone: Optional[str]
+    n_passport: Optional[str]
+    n_vu: Optional[str]
+    s_passport: Optional[str]
+    email: Optional[EmailStr]
+    password: Optional[str]
+    role: Optional[str]
+
+class UserResponse(UserBase):
+    id_user: int
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
-class UserResponse(BaseModel):
-    id_user: int = Field(..., description="ID пользователя")
-    f_name: str = Field(..., description="Фамилия пользователя")
-    name: str = Field(..., description="Имя пользователя")
-    l_name: str = Field(..., description="Отчество пользователя")
-    telephone: int = Field(..., description="Номер телефона")
-    n_passport: int = Field(..., description="Серия паспорта")
-    s_passport: int = Field(..., description="Номер паспорта")
-    n_vu: int = Field(..., description="Номер водительского удостоверения")
-    email: EmailStr = Field(..., description="Email пользователя")
-    role: str = Field(..., description="Роль пользователя")
-
-    class Config:
-        from_attributes = True
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str

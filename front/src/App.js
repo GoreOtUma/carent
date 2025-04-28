@@ -19,9 +19,9 @@ function App() {
           <Route path="/signin" element={<Layout><SignIn /></Layout>} />
           <Route path="/signup" element={<Layout><SignUp /></Layout>} />   
           <Route path="/mainpage" element={<Layout><MainPage /></Layout>} /> 
-          <Route path="/contract" element={<Layout><Contract /></Layout>} />
-          <Route path="/profile" element={<Layout><Profile/></Layout>}/>
-          <Route path="/archive_user" element={<Layout><ArchiveUser /></Layout>} />  
+          <Route path="/contract" element={<PrivateRoute><Layout><Contract /></Layout></PrivateRoute>} />
+          <Route path="/profile" element={<PrivateRoute><Layout><Profile/></Layout></PrivateRoute>}/>
+          <Route path="/archive_user" element={<PrivateRoute><Layout><ArchiveUser /></Layout></PrivateRoute>} />  
         </Routes>
       </Router>
     </AuthProvider>

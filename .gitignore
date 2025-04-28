@@ -2,3 +2,4 @@
 .venv
 *.pyc
 versions
+.venv2

@@ -24,22 +24,15 @@ const SignIn = () => {
       const response = await api.post("auth", payload);
       if (response.status === 200) {
         const accessToken = response.data.access_token;
-        localStorage.setItem("access_token", accessToken);
-  
         const decoded = JSON.parse(atob(accessToken.split('.')[1]));
         const userRole = decoded?.user_role || "unknown_user";
         const userId = decoded?.user_id;
-        const userData = await UserService.getById(userId);
-        const fullName = userData?.name || "Пользователь";
-  
+
+        localStorage.setItem("access_token", accessToken);
         localStorage.setItem("auth", "true");
-        localStorage.setItem("user", JSON.stringify(userData));
-        localStorage.setItem("username", fullName);
         localStorage.setItem("user_role", userRole);
         localStorage.setItem("user_id", userId);
-        localStorage.setItem("email", userData?.email);
-  
-        setUser({ name: fullName, role: userRole });
+        setUser({ id: userId, role: userRole });
         navigate('/mainpage');
       }      
     } catch (error) {
@@ -67,16 +60,16 @@ const SignIn = () => {
         <form className="registration__inputs" onSubmit={handleSubmit(login)}>
           <div className="email-input">
             <MyInput
-              id="login_or_email"
+              id="email"
               placeholder="Введите email"
               type="text"
               label="Email"
-              {...register("login_or_email", {
+              {...register("email", {
                 required: "Поле обязательно для заполнения",
               })}
             />
-            {errors.login_or_email && (
-              <p className="error-message">{errors.login_or_email.message}</p>
+            {errors.email && (
+              <p className="error-message">{errors.email.message}</p>
             )}
           </div>
 

@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import MyButton from "../components/UI/button/MyButton";
 import MyInput from "../components/UI/input/MyInput";
 import { useNavigate } from "react-router-dom";
 import ItWorkSidebar from "../components/ItWorkSidebar";
 import "../styles/Registration.css";
-//import api from "../API/axiosInstance"
+import { AuthContext } from "../context/AuthContext";
+import api from "../API/axiosInstance"
 
 const SignUp = () => {
+  const {setUser} = useContext(AuthContext);
   const { register, formState: { errors }, handleSubmit, reset, watch } = useForm({
     mode: "onBlur",
   });
@@ -19,21 +21,40 @@ const SignUp = () => {
   const onSubmit = async (data) => {
 
     const payload = {
-      surname: data.surname,  
+      f_name: data.f_name,  
       name: data.name,
-      patronimic: data.patronimic,
-      telephone: data.telephone,
-      VU: data.VU,
+      l_name: data.l_name,
+      s_passport: parseInt(data.s_passport, 10),
+      n_passport: parseInt(data.n_passport, 10),
+      telephone: parseInt(data.telephone, 10),
+      n_vu: parseInt(data.n_vu, 10),
       password: data.password,
       email: data.email,
+      role: "user",
     };
 
-
     try {
-      //await api.post('users', payload);
-      //localStorage.setItem("auth", "true");
-      navigate('/mainpage');
-      reset();
+      const resp = await api.post('users', payload);
+      if (resp.status === 200) {
+        const payloadauth = {email: data.email,password: data.password}
+        const response = await api.post("auth", payloadauth);
+
+        if (response.status === 200) {
+
+          const accessToken = response.data.access_token;
+          const decoded = JSON.parse(atob(accessToken.split('.')[1]));
+          const userRole = decoded?.user_role || "unknown_user";
+          const userId = decoded?.user_id;
+
+          localStorage.setItem("access_token", accessToken);
+          localStorage.setItem("auth", "true");
+          localStorage.setItem("user_role", userRole);
+          localStorage.setItem("user_id", userId);
+          setUser({ id: userId, role: userRole });
+          navigate('/mainpage');
+          reset();
+        }
+      }
     } catch (e) {
         console.error(e.response?.data);
     }
@@ -53,49 +74,49 @@ const SignUp = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="registration__inputs">
           <div className="surname-input">
             <MyInput
-              {...register("surname", {
+              {...register("l_name", {
                 required: "Поле обязательно к заполнению",
                 minLength: { value: 1, message: "Фамилия не может быть пустой" },
-                maxLength: { value: 255, message: "Слишком длинная фамилия" },
+                maxLength: { value: 50, message: "Слишком длинная фамилия" },
               })}
               label="Фамилия"
               type="text"
               placeholder="Введите фамилию"
-              id="surname"
-              name="surname"
+              id="l_name"
+              name="l_name"
             />
           </div>
-          {errors?.surname && <p style={{ color: "red" }}>{errors?.surname?.message}</p>}
+          {errors?.l_name && <p style={{ color: "red" }}>{errors?.l_name?.message}</p>}
 
           <div className="name-input">
             <MyInput
-              {...register("name", {
+              {...register("f_name", {
                 required: "Поле обязательно к заполнению",
                 minLength: { value: 1, message: "Имя не может быть пустым" },
-                maxLength: { value: 255, message: "Слишком длинное имя" },
+                maxLength: { value: 50, message: "Слишком длинное имя" },
               })}
               label="Имя"
               type="text"
               placeholder="Введите имя"
-              id="name"
-              name="name"
+              id="f_name"
+              name="f_name"
             />
           </div>
-          {errors?.name && <p style={{ color: "red" }}>{errors?.name?.message}</p>}
+          {errors?.f_name && <p style={{ color: "red" }}>{errors?.f_name?.message}</p>}
 
           <div className="patronimic-input">
             <MyInput
-              {...register("patronimic", {
+              {...register("name", {
                 required: "Поле обязательно к заполнению",
               })}
               label="Отчество"
               type="text"
               placeholder="Введите отчество"
-              id="patronimic"
-              name="patronimic"
+              id="name"
+              name="name"
             />
           </div>
-          {errors?.patronimic && <p style={{ color: "red" }}>{errors?.patronimic?.message}</p>}
+          {errors?.name && <p style={{ color: "red" }}>{errors?.name?.message}</p>}
 
           <div className="email-input">
             <MyInput
@@ -120,6 +141,10 @@ const SignUp = () => {
               {...register("telephone", {
                 required: "Поле обязательно к заполнению",
                 minLength: { value: 1, message: "Номер телефона должен содержать 11 цифр" },
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: "Допускаются только цифры"
+                },
               })}
               label="Номер телефона"
               type="text"
@@ -132,33 +157,60 @@ const SignUp = () => {
 
           <div className="Passport-input">
             <MyInput
-              {...register("Passport", {
+              {...register("s_passport", {
                 required: "Поле обязательно к заполнению",
                 minLength: { value: 1, message: "Паспорт должен содержать 10 цифр" },
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: "Допускаются только цифры"
+                },
               })}
-              label="Серия и номер паспорта"
+              label="Серия паспорта"
               type="text"
-              placeholder="Введите серию и номер паспорта"
-              id="passport"
-              name="passport"
+              placeholder="Введите серию паспорта"
+              id="s_passport"
+              name="s_passport"
             />
           </div>
-          {errors?.passport && <p style={{ color: "red" }}>{errors?.passport?.message}</p>}
+          {errors?.s_passport && <p style={{ color: "red" }}>{errors?.s_passport?.message}</p>}
+          
+          <div className="Passport-input">
+            <MyInput
+              {...register("n_passport", {
+                required: "Поле обязательно к заполнению",
+                minLength: { value: 1, message: "Паспорт должен содержать 10 цифр" },
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: "Допускаются только цифры"
+                },
+              })}
+              label="номер паспорта"
+              type="text"
+              placeholder="Введите номер паспорта"
+              id="n_passport"
+              name="n_passport"
+            />
+          </div>
+          {errors?.n_passport && <p style={{ color: "red" }}>{errors?.n_passport?.message}</p>}
 
           <div className="VU-input">
             <MyInput
-              {...register("VU", {
+              {...register("n_vu", {
                 required: "Поле обязательно к заполнению",
                 minLength: { value: 1, message: "Вод. удостоверение должено содержать 10 цифр" },
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: "Допускаются только цифры"
+                },
               })}
               label="Серия и номер ВУ"
               type="text"
               placeholder="Введите серию и номер ВУ"
-              id="VU"
-              name="VU"
+              id="n_vu"
+              name="n_vu"
             />
           </div>
-          {errors?.VU && <p style={{ color: "red" }}>{errors?.VU?.message}</p>}
+          {errors?.n_vu && <p style={{ color: "red" }}>{errors?.n_vu?.message}</p>}
 
           <div className="password-input">
             <MyInput

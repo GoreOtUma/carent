@@ -12,10 +12,12 @@ from api.v1.insurance import router as insurancerouter
 from api.v1.priceseason import router as priceseasonrouter
 from api.v1.returncar import router as returncarrouter
 from api.v1.transmission import router as transmissionrouter
+from api.v1.auth import router as auth_router
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+app.include_router(auth_router, prefix="/api/v1")
 app.include_router(brandrouter, prefix="/api/v1")
 app.include_router(modelrouter, prefix="/api/v1")
 app.include_router(carrouter, prefix="/api/v1")

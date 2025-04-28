@@ -4,8 +4,14 @@ from sqlalchemy import String, text, ForeignKey, Column, Integer, Boolean, Numer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import Annotated, Optional
 from db.session import Base, str_128, str_256, str_64
+from sqlalchemy import Enum as SQLEnum 
 
 intpk = Annotated[int, mapped_column(primary_key=True)]
+
+class Role(enum.Enum):
+    user = "user"
+    worker = "worker"
+    manager = "manager"
 
 class Brand(Base):
     __tablename__ = "brands"
@@ -91,7 +97,8 @@ class User(Base):
     n_vu: Mapped[int] = mapped_column(Numeric(20), nullable=False)
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(String(255), nullable=False)
-    role: Mapped[str] = mapped_column(String(50), default="user")
+    role: Mapped[Role] = mapped_column(default=Role.user)
+
 
     returns = relationship("ReturnCar", back_populates="user")
     

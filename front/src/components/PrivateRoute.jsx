@@ -9,14 +9,6 @@ const PrivateRoute = ({ children }) => {
   }
 
   if (!user) return <Navigate to='/mainpage' />;
-  if (user.role !== "appruved_user") {
-  }
-  
-  if (user.role !== "manager") {
-  }
-  
-  if (user.role !== "admin") {
-  }
 
   return children;
 };

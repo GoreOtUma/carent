@@ -18,7 +18,7 @@ async def get_user(
     user_id: int, 
     db: AsyncSession = Depends(get_session)
 ):
-    user = await UserService.get_user(user_id, db)
+    user = await UserService.get_user_by_id(user_id, db)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Пользователь не найден")
     return user
