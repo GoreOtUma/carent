@@ -3,31 +3,11 @@ import '../styles/MainPage.css';
 import '../styles/Profile.css';
 import InfoBlock from '../components/InfoBlock.jsx';
 import MyButton from '../components/UI/button/MyButton.jsx';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 
 const Profile = () => {
-  const navigate = useNavigate();
   const username = localStorage.getItem("username");
   const email = localStorage.getItem("email")
-  const login = localStorage.getItem("login")
-  
-  const { setUser } = useAuth();
 
-
-  const handleProfile = () => {
-    navigate('/profile');
-  };
-  const handleLogout = () => {
-    localStorage.removeItem("auth");
-    localStorage.removeItem("username");
-    localStorage.removeItem("user_role");
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("email");
-    localStorage.removeItem("login");
-    setUser(null);
-    navigate('/signin');
-  };
     return (
       <div className="profile-page">
         <div className='profile-info'>

@@ -15,7 +15,7 @@ const dummyCars = [
     mileage: '42000 км',
     year: 2020,
     color: 'серый',
-    bodyType: 'Седки',
+    bodyType: 'Седан',
     description: 'Лучшая машина!',
     image: 'https://www.automoli.com/common/vehicles/_assets/img/gallery/f38/toyota-carina-e-t19.jpg',
   },

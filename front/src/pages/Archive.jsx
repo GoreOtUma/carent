@@ -24,7 +24,7 @@ const ArchiveWorker = () => {
   const contracts = activeTab === 'archived' ? archivedContracts : currentContracts;
 
   return (
-    <div className="archive-worker-page">
+    <div className="archive-worker-page archive-page">
       <h3>Архив. Работник</h3>
 
       <div className="top-menu">

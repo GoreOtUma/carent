@@ -51,8 +51,8 @@ const Contract = () => {
           <div className="form-group">
             <label>Дата</label>
             <div className="date-inputs">
-              <input type="date" placeholder="От" />
-              <input type="date" placeholder="До" />
+              <input type="datetime-local" placeholder="От" />
+              <input type="datetime-local" placeholder="До" />
             </div>
           </div>
 
