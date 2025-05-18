@@ -12,12 +12,6 @@
   text-align: center;
 }
 
-.filter-section {
-  margin-bottom: 25px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #eee;
-}
-
 .filter-section:last-child {
   border-bottom: none;
 }
