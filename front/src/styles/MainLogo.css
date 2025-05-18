@@ -1,46 +1,89 @@
-@media screen and (max-width: 767px) {
-    .headline-carent {
-        justify-content: center;
-    }  
-
-    .carent-text {
-        display: none !important;
-    }
+.main-page {
+  display: flex;
+  padding: 20px;
+  gap: 20px;
+  background-color: #f5f5f5;
 }
 
-@media screen and (min-width: 768px) {
-    .authorized-logo {
-        display: none !important;
-    }
+.filters h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
 }
 
-@media screen and (max-width: 1024px) {
-    .carent-text {
-        font-size: 20px;
-    }
+.filter-section {
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
 }
 
-@media screen and (min-width: 1025px) {
-    .carent-text {
-        font-size: 22px;
-    }
+.filter-section:last-child {
+  border-bottom: none;
 }
 
-@media screen and (min-width: 1200px) {
-    .carent-text {
-        font-size: 28px;
-    }
+.filter-section h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: #333;
+  font-weight: 600;
 }
 
-.carent-text {
-    color: #10141A;
-    text-transform: uppercase;
+.filter-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 4px 0;
 }
 
-.headline-carent {
-    display: flex;
-    gap: 16px;
+.filter-row span {
+  margin-right: 8px;
+  min-width: 30px;
 }
-.carent-logo{
-    width: 100px;
+
+.dashed-input {
+  border: none;
+  border-bottom: 1px dashed #999;
+  padding: 4px 8px;
+  flex-grow: 1;
+  background: transparent;
+}
+
+.dashed-input:focus {
+  outline: none;
+  border-bottom-color: #1436e0;
+}
+
+.price-range {
+  display: flex;
+  gap: 8px;
+}
+
+.price-range .dashed-input {
+  flex: 1;
+}
+
+.brand-select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+}
+
+.main-page__cards {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .main-page {
+    flex-direction: column;
+  }
+  
+  .filters {
+    width: 100%;
+  }
 }

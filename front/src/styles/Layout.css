@@ -1,18 +1,8 @@
 .main-wrapper {
-  background-color: var(--bluegradient);
   box-sizing: border-box;
-  height: 100%;
-
-  background: linear-gradient(
-      196deg,
-      rgba(146, 146, 146, 0.507) 0%,
-      rgba(255, 255, 255, 0.2) 25%
-    ),
-    linear-gradient(
-      0deg,
-      rgba(255, 255, 255, 1) 0%,
-      rgba(255, 255, 255, 1) 100%
-  );
+  background-color: #F5F5F5;
+  padding-bottom: 20px;
+  min-height: 100vh;
 }
 
 .content {

@@ -45,3 +45,13 @@
 .main-buttons {
     text-align: center;
 }
+
+.secondary-button {
+    background-color: #FFFFFF;
+    box-shadow: none;
+    border: none;
+    color: #B3B3B3;
+    max-width: 250px;
+    padding: 0;
+    width: max-content;
+}
