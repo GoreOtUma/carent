@@ -6,10 +6,10 @@ const Profile = ({ header, body }) => {
     return (
         <div className="info-block">
             <div className="info__header">
-                {header}
+              <span>{header}</span>
             </div>
             <div className="info__body">
-              <p>{body}</p>
+              <span>{body}</span>
             </div>
         </div>
     );
