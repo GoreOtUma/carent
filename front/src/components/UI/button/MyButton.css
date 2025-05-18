@@ -63,3 +63,7 @@
 .filter-button {
     margin-top: 20px;
 }
+
+.fixion-button {
+    display: none;
+}

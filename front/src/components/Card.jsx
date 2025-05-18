@@ -99,7 +99,7 @@ const Card = ({
               onClick={handleRentClick}
               disabled={!user || user.role !== "user"}
             >
-              {user?.role === "user" ? "Арендовать" : "Войдите для аренды"}
+              {(user?.role === "user" || user?.role === "worker" ) ? "Арендовать" : "Войдите для аренды"}
             </MyButton>
           </div>
         </>

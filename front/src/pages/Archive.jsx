@@ -6,14 +6,9 @@ const ArchiveWorker = () => {
   const [activeTab, setActiveTab] = useState('archived');
 
   const archivedContracts = [
-    {
-      brand: 'Totoya Corolla',
-      name: 'Иванов Иван Иванович',
-      email: 'prok@rent.com',
-      date: '11.12.2022 - 21.12.2022',
-      insurance: 'Тип страховки',
-      price: '5000 руб.',
-    },
+    { id : 3, brand: 'Toyota Carina', name: 'Иванов Иван Иванович', email: 'prok@rent.com', price: '5000', period: '12.12.2005 15:00 — 05.01.2006 15:00', insurance: 'Базовая' },
+    { id : 5, brand: 'Toyota Carina', name: 'Иванов Иван Иванович', email: 'prok@rent.com', price: '5000', period: '12.12.2006 15:00 — 05.01.2007 15:00', insurance: 'Базовая' },
+    { id : 7, brand: 'Toyota Carina', name: 'Иванов Иван Иванович', email: 'prok@rent.com', price: '5000', period: '12.12.2007 15:00 — 05.01.2008 15:00', insurance: 'Базовая' },
   ];
 
   const currentContracts = archivedContracts.map(contract => ({
@@ -25,7 +20,8 @@ const ArchiveWorker = () => {
 
   return (
     <div className="archive-worker-page archive-page">
-      <h3>Архив. Работник</h3>
+      <div className="archive-page-main">
+      <div className="filters">
 
       <div className="top-menu">
         <button
@@ -41,38 +37,57 @@ const ArchiveWorker = () => {
           Текущие контракты
         </button>
       </div>
-
-      <div className="content">
-        <div className="filter-panel">
-          <label>Дата</label>
-          <div>
-            <input type="date" placeholder="От" />
-            <input type="date" placeholder="До" />
+          <div className="filter-section">
+          <h3 className="section-title">Дата:</h3>
+          <div className="date-range">
+            <div className="date-input">
+              <span>От</span>
+              <input type="datetime-local" className="filter-input" />
+            </div>
+            <div className="date-input">
+              <span>До</span>
+              <input type="datetime-local" className="filter-input" />
+            </div>
           </div>
-          <label>Марка</label>
-          <input type="text" placeholder="Введите марку" />
-          <MyButton className="filter-button">Фильтровать</MyButton>
-          <MyButton className="reset-button">Сбросить фильтр</MyButton>
         </div>
+        <div className="filter-section">
+          <h3 className="section-title">Марка автомобиля</h3>
+          <select className="brand-select">
+            <option value="">Все марки</option>
+            {['Toyota', 'Honda', 'BMW', 'Audi', 'Volkswagen', 'Kia', 'Ford'].map((brand) => (
+              <option key={brand} value={brand.toLowerCase()}>{brand}</option>
+            ))}
+          </select>
+        </div> 
+        <div className="filter-section">
+          <MyButton className="filter-button">Фильтровать</MyButton>
+        </div>
+        <div className="filter-section">
+          <MyButton className="filter-button">Сбросить фильтр</MyButton>
+        </div>
+      </div>
 
-        <div className="contracts">
+
+        <div className="contract-list">
           {contracts.map((contract, index) => (
             <div className="contract-card" key={index}>
-              <div className="card-header">
-                <strong>{contract.brand}</strong>
-                <span>Id контракта</span>
-              </div>
-              <div className="card-body">
+            <div className="contract-card-main">
+                <div className="contract-brand"><strong>{contract.brand}</strong></div>
                 <div>{contract.name}</div>
                 <div>{contract.email}</div>
-                <div>{contract.date}</div>
+                <div>{contract.period}</div>
                 <div>{contract.insurance}</div>
-              </div>
-              <div className="card-footer">
-                {contract.button && <MyButton>{contract.button}</MyButton>}
-                <span>{contract.price}</span>
-              </div>
             </div>
+            <div className="additional-left additional-left-many">
+              <div>{contract.id}</div>
+              <div>{contract.price} ₽</div>
+              {activeTab === 'current' ? (
+                  <MyButton className="close-button">Закрыть аренду</MyButton>
+                ) : (
+                  <MyButton className="fixion-button"></MyButton>
+                )}
+            </div>
+          </div>
           ))}
         </div>
       </div>
