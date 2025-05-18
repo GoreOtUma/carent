@@ -67,6 +67,7 @@ const SignUp = () => {
   return (
     <div className="registration-page">
       <div className="registration">
+      <div className="registation_main">
         <div className="registration__message">
           <p className="main-message">Регистрация</p>
         </div>
@@ -252,6 +253,7 @@ const SignUp = () => {
             <MyButton className="button-registration primary-button auth" type="submit">Зарегистироваться</MyButton>
           </div>
         </form>
+        </div>
 
         <div className="to-sign-in">
           <span className="secondary-text">Уже есть аккаунт?</span>

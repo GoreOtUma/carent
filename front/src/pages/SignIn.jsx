@@ -18,7 +18,7 @@ const SignIn = () => {
 
 
   const login = async (data) => {
-    const payload = {email: data.email,password: data.password}
+    const payload = {email: data.email, password: data.password}
     
     try {
       const response = await api.post("auth", payload);
@@ -28,11 +28,20 @@ const SignIn = () => {
         const userRole = decoded?.user_role || "unknown_user";
         const userId = decoded?.user_id;
 
+        // Сохраняем данные в localStorage
         localStorage.setItem("access_token", accessToken);
         localStorage.setItem("auth", "true");
-        localStorage.setItem("user_role", userRole);
-        localStorage.setItem("user_id", userId);
-        setUser({ id: userId, role: userRole });
+        
+        // Создаем объект пользователя
+        const userData = { 
+          id: userId, 
+          role: userRole,
+          email: data.email
+        };
+        
+        // Сохраняем объект пользователя целиком
+        localStorage.setItem("user", JSON.stringify(userData));
+        setUser(userData); // Обновляем контекст
         navigate('/mainpage');
       }      
     } catch (error) {
@@ -40,8 +49,6 @@ const SignIn = () => {
       setErrorMessage("Неверный логин или пароль!");
     }
   };
-  
-  
 
   const handleRedirect = () => {
     navigate('/signup');
@@ -50,8 +57,9 @@ const SignIn = () => {
   return (
     <div className="registration-page">
       <div className="registration">
+      <div className="registation_main">
         <div className="registration__message">
-          <p className="main-message"> <br></br></p>
+          <p className="main-message"> Вход </p>
           <p className="additional-message secondary-text "></p>
         </div>
 
@@ -104,6 +112,7 @@ const SignIn = () => {
             <MyButton className="button-registration primary-button auth" type="submit">Войти</MyButton>
           </div>
         </form>
+      </div>
 
         <div className="to-sign-up">
           <span className="secondary-text">Нет аккаунта?</span>
