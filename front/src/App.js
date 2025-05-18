@@ -9,6 +9,7 @@ import Contract from './pages/Contract'
 import ArchiveUser from './pages/ArchiveUser'
 import Profile from './pages/Profile';
 import PrivateRoute from './components/PrivateRoute';
+import Archive from './pages/Archive'
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/contract" element={<PrivateRoute><Layout><Contract /></Layout></PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute><Layout><Profile/></Layout></PrivateRoute>}/>
           <Route path="/archive_user" element={<PrivateRoute><Layout><ArchiveUser /></Layout></PrivateRoute>} />  
+          <Route path="/archive" element={<PrivateRoute><Layout><Archive/></Layout></PrivateRoute>} /> 
         </Routes>
       </Router>
     </AuthProvider>
