@@ -4,18 +4,18 @@ import Card from '../components/Card';
 
 const dummyCars = [
   {
-    model: 'Totoya Carina',
-    cost: 1000,
-    number: 'О000ОО00',
+    model: 'Toyota Carina',
+    cost: 2000,
+    number: '00000000',
     transmission: 'Автомат',
-    fuel: 'Бензин',
-    trunkVolume: 500,
-    engineVolume: 1.8,
+    fuel: 'бензин',
+    trunkVolume: '500л',
+    engineVolume: '1.8л',
     seats: 5,
-    mileage: 42000,
+    mileage: '42000 км',
     year: 2020,
-    color: 'Серый',
-    bodyType: 'Седан',
+    color: 'серый',
+    bodyType: 'Седки',
     description: 'Лучшая машина!',
     image: 'https://www.automoli.com/common/vehicles/_assets/img/gallery/f38/toyota-carina-e-t19.jpg',
   },
@@ -43,182 +43,123 @@ const MainPage = () => {
   return (
     <div className="main-page">
       <aside className="filters">
-        <div className="filter-group">
-          <h3>Дата</h3>
-          <div className="filter-item">
-            <label>От:</label>
-            <input type="text" placeholder="" />
-          </div>
-          <div className="filter-item">
-            <label>До:</label>
-            <input type="text" placeholder="" />
-          </div>
-          <div className="filter-item">
-            <label>Цена, ₽:</label>
-            <div className="price-range">
-              <input type="number" placeholder="Min" />
-              <input type="number" placeholder="Макс" />
+        <div className="filter-section">
+          <h3 className="section-title">Даты аренды</h3>
+          <div className="date-range">
+            <div className="date-input">
+              <span>От</span>
+              <input type="datetime-local" className="filter-input" />
+            </div>
+            <div className="date-input">
+              <span>До</span>
+              <input type="datetime-local" className="filter-input" />
             </div>
           </div>
         </div>
 
-        <div className="filter-group">
-          <h3>Трансмиссия</h3>
-          <div className="filter-item">
-            <input type="checkbox" id="automatic" />
-            <label htmlFor="automatic">Автомат</label>
-          </div>
-          <div className="filter-item">
-            <input type="checkbox" id="manual" />
-            <label htmlFor="manual">Механика</label>
-          </div>
-          <div className="filter-item">
-            <input type="checkbox" id="variator" />
-            <label htmlFor="variator">Вариатор</label>
-          </div>
-          <div className="filter-item">
-            <input type="checkbox" id="robot" />
-            <label htmlFor="robot">Робот</label>
-          </div>
-          <div className="filter-item">
-            <input type="checkbox" id="hybrid" />
-            <label htmlFor="hybrid">Гибрид</label>
+        <div className="filter-section">
+          <h3 className="section-title">Цена, ₽</h3>
+          <div className="price-range">
+            <input type="number" className="filter-input" placeholder="Min" />
+            <span>-</span>
+            <input type="number" className="filter-input" placeholder="Max" />
           </div>
         </div>
 
-        <div className="filter-group">
-          <h3>Количество мест</h3>
-          <div className="filter-item">
-            <input type="checkbox" id="seats2" />
-            <label htmlFor="seats2">2</label>
-          </div>
-          <div className="filter-item">
-            <input type="checkbox" id="seats5" />
-            <label htmlFor="seats5">5</label>
-          </div>
-          <div className="filter-item">
-            <input type="checkbox" id="seats8" />
-            <label htmlFor="seats8">8</label>
+        <div className="filter-section">
+          <h3 className="section-title">Трансмиссия</h3>
+          {['Автомат', 'Механика', 'Вариатор', 'Робот', 'Гибрид'].map((type) => (
+            <label key={type} className="checkbox-item">
+              <input type="checkbox" />
+              <span className="checkbox-icon"></span>
+              <span className="checkbox-label">{type}</span>
+            </label>
+          ))}
+        </div>
+
+        <div className="filter-section">
+          <h3 className="section-title">Количество мест</h3>
+          {['2', '5', '8'].map((seats) => (
+            <label key={seats} className="checkbox-item">
+              <input type="checkbox" />
+              <span className="checkmark"></span>
+              {seats}
+            </label>
+          ))}
+        </div>
+
+        <div className="filter-section">
+          <h3 className="section-title">Пробег, км</h3>
+          <div className="range-inputs">
+            <input type="number" className="filter-input" placeholder="От" />
+            <input type="number" className="filter-input" placeholder="До" />
           </div>
         </div>
 
-        <div className="filter-group">
-          <h3>Пробег, км</h3>
-          <div className="filter-item">
-            <label>От:</label>
-            <input type="number" placeholder="" />
-          </div>
-          <div className="filter-item">
-            <label>До:</label>
-            <input type="number" placeholder="" />
-          </div>
-          <h3>Топливо</h3>
-          <div className="filter-item">
-            <input type="checkbox" id="electric" />
-            <label htmlFor="electric">Электричество</label>
-          </div>
-          <div className="filter-item">
-            <input type="checkbox" id="petrol" />
-            <label htmlFor="petrol">Бензин</label>
-          </div>
-          <div className="filter-item">
-            <input type="checkbox" id="diesel" />
-            <label htmlFor="diesel">Дизель</label>
-          </div>
-          <div className="filter-item">
-            <input type="checkbox" id="gas" />
-            <label htmlFor="gas">Газ</label>
-          </div>
-          <div className="filter-item">
-            <input type="checkbox" id="hybrid-fuel" />
-            <label htmlFor="hybrid-fuel">Гибрид</label>
+        <div className="filter-section">
+          <h3 className="section-title">Топливо</h3>
+          {['Электричество', 'Бензин', 'Дизель', 'Газ', 'Гибрид'].map((fuel) => (
+            <label key={fuel} className="checkbox-item">
+              <input type="checkbox" />
+              <span className="checkmark"></span>
+              {fuel}
+            </label>
+          ))}
+        </div>
+
+        <div className="filter-section">
+          <h3 className="section-title">Год выпуска</h3>
+          <div className="range-inputs">
+            <input type="number" className="filter-input" placeholder="От" />
+            <input type="number" className="filter-input" placeholder="До" />
           </div>
         </div>
 
-        <div className="filter-group">
-          <h3>Год выпуска</h3>
-          <div className="filter-item">
-            <label>От:</label>
-            <input type="number" placeholder="" />
-          </div>
-          <div className="filter-item">
-            <label>До:</label>
-            <input type="number" placeholder="" />
-          </div>
-          <h3>Цвет</h3>
-          <div className="filter-item">
-            <input type="checkbox" id="white" />
-            <label htmlFor="white">Белый</label>
-          </div>
-          <div className="filter-item">
-            <input type="checkbox" id="blue" />
-            <label htmlFor="blue">Синий</label>
-          </div>
-          <div className="filter-item">
-            <input type="checkbox" id="black" />
-            <label htmlFor="black">Черный</label>
-          </div>
-          <div className="filter-item">
-            <input type="checkbox" id="red" />
-            <label htmlFor="red">Красный</label>
-          </div>
-          <div className="filter-item">
-            <input type="checkbox" id="yellow" />
-            <label htmlFor="yellow">Желтый</label>
+        <div className="filter-section">
+          <h3 className="section-title">Цвет</h3>
+          {['Белый', 'Синий', 'Черный', 'Красный', 'Желтый'].map((color) => (
+            <label key={color} className="checkbox-item">
+              <input type="checkbox" />
+              <span className="checkmark"></span>
+              {color}
+            </label>
+          ))}
+        </div>
+
+        <div className="filter-section">
+          <h3 className="section-title">Объём двигателя</h3>
+          <div className="range-inputs">
+            <input type="number" className="filter-input" placeholder="От" />
+            <input type="number" className="filter-input" placeholder="До" />
           </div>
         </div>
 
-        <div className="filter-group">
-          <h3>Объём двигателя</h3>
-          <div className="filter-item">
-            <label>От:</label>
-            <input type="number" placeholder="" />
-          </div>
-          <div className="filter-item">
-            <label>До:</label>
-            <input type="number" placeholder="" />
-          </div>
-          <h3>Объём багажника</h3>
-          <div className="filter-item">
-            <label>От:</label>
-            <input type="number" placeholder="" />
-          </div>
-          <div className="filter-item">
-            <label>До:</label>
-            <input type="number" placeholder="" />
+        <div className="filter-section">
+          <h3 className="section-title">Объём багажника</h3>
+          <div className="range-inputs">
+            <input type="number" className="filter-input" placeholder="От" />
+            <input type="number" className="filter-input" placeholder="До" />
           </div>
         </div>
 
-        <div className="filter-group">
-          <h3>Кузов</h3>
-          <div className="filter-item">
-            <input type="checkbox" id="sedan" />
-            <label htmlFor="sedan">Седки</label>
-          </div>
-          <div className="filter-item">
-            <input type="checkbox" id="hatchback" />
-            <label htmlFor="hatchback">Хетчбек</label>
-          </div>
-          <div className="filter-item">
-            <input type="checkbox" id="crossover" />
-            <label htmlFor="crossover">Кроссовер</label>
-          </div>
+        <div className="filter-section">
+          <h3 className="section-title">Кузов</h3>
+          {['Седан', 'Хетчбек', 'Кроссовер'].map((body) => (
+            <label key={body} className="checkbox-item">
+              <input type="checkbox" />
+              <span className="checkmark"></span>
+              {body}
+            </label>
+          ))}
         </div>
 
-        <div className="filter-group">
-          <h3>Марка автомобиля</h3>
+        <div className="filter-section">
+          <h3 className="section-title">Марка автомобиля</h3>
           <select className="brand-select">
             <option value="">Все марки</option>
-            <option value="toyota">Toyota</option>
-            <option value="honda">Honda</option>
-            <option value="bmw">BMW</option>
-            <option value="audi">Audi</option>
-            <option value="mercedes">Mercedes</option>
-            <option value="volkswagen">Volkswagen</option>
-            <option value="nissan">Nissan</option>
-            <option value="hyundai">Hyundai</option>
-            <option value="kia">Kia</option>
-            <option value="ford">Ford</option>
+            {['Toyota', 'Honda', 'BMW', 'Audi', 'Mercedes', 'Volkswagen', 'Nissan', 'Hyundai', 'Kia', 'Ford'].map((brand) => (
+              <option key={brand} value={brand.toLowerCase()}>{brand}</option>
+            ))}
           </select>
         </div>
       </aside>
