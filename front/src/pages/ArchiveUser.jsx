@@ -5,11 +5,6 @@ const ArchiveUser = () => {
   // Здесь позже можно будет подключить фильтры и загрузку данных с сервера
   const contracts = [
     { brand: 'Toyota Carina', price: '5000', period: '12.12.2005 15:00 — 05.01.2006 15:00', insurance: 'Базовая' },
-    { brand: 'Toyota Carina', price: '5000', period: '12.12.2006 15:00 — 05.01.2007 15:00', insurance: 'Базовая' },
-    { brand: 'Toyota Carina', price: '5000', period: '12.12.2007 15:00 — 05.01.2008 15:00', insurance: 'Базовая' },
-    { brand: 'Toyota Carina', price: '5000', period: '12.12.2008 15:00 — 05.01.2009 15:00', insurance: 'Базовая' },
-    { brand: 'Toyota Carina', price: '5000', period: '12.12.2009 15:00 — 05.01.2010 15:00', insurance: 'Базовая' },
-    { brand: 'Toyota Carina', price: '5000', period: '12.12.20010 15:00 — 05.01.2011 15:00', insurance: 'Базовая' },
   ];
 
   return (

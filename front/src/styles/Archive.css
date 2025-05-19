@@ -75,8 +75,6 @@
 
 .contract-list {
   flex: 1;
-  gap: 20px;
-  display: grid;
 }
 
 .archive-page {
@@ -95,6 +93,7 @@ h1 {
 .contract-card {
   display: flex;
   flex-direction: row;
+  margin-bottom: 20px;
 }
 
 .additional-left {
