@@ -1,108 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/MainPage.css';
 import Card from '../components/Card';
+import CarService from '../API/CarService';
 
-const dummyCars = [
-  {
-    model: 'Toyota Carina E',
-    cost: 500,
-    number: 'У724ТС43',
-    transmission: 'Механика',
-    fuel: 'бензин',
-    trunkVolume: '500л',
-    engineVolume: '2.0л',
-    seats: 5,
-    mileage: '42000 км',
-    year: 1993,
-    color: 'серый',
-    bodyType: 'Серый',
-    description: 'Не машина, а мечта!',
-    image: 'https://www.automoli.com/common/vehicles/_assets/img/gallery/f38/toyota-carina-e-t19.jpg',
-  },
-  {
-    model: 'Volkswagen Golf',
-    cost: 1000,
-    number: 'А870СУ43',
-    transmission: 'Механика',
-    fuel: 'Бензин',
-    trunkVolume: '500л',
-    engineVolume: '1.6л',
-    seats: 5,
-    mileage: 99000,
-    year: 2004,
-    color: 'Синий',
-    bodyType: 'Хэтчбэк',
-    description: 'Лучшая машина!',
-    image: 'https://auto.vercity.ru/gallery/img/automobiles/Volkswagen/2014%20Volkswagen%20Golf%20R%205-Door%20(ZA)/900x/2014%20Volkswagen%20Golf%20R%205-Door%20(ZA)%20003.jpg',
-  },
-{
-    model: 'Honda Accord',
-    cost: 1500,
-    number: 'А224АС43',
-    transmission: 'Автомат',
-    fuel: 'бензин',
-    trunkVolume: '200л',
-    engineVolume: '2.4л',
-    seats: 5,
-    mileage: '2000 км',
-    year: 2008,
-    color: 'Белый',
-    bodyType: 'Седан',
-    description: 'Пушка - гонка',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/4/46/Honda_Accord_%282008%29_front.JPG',
-  },
-{
-    model: 'ВАЗ 2109',
-    cost: 400,
-    number: 'А087АС69',
-    transmission: 'Механика',
-    fuel: 'бензин',
-    trunkVolume: '200л',
-    engineVolume: '1.6л',
-    seats: 5,
-    mileage: '150000 км',
-    year: 2004,
-    color: 'Черный',
-    bodyType: 'Седан',
-    description: 'На дачу хороший вариант',
-    image: 'https://kotsport.ru/wp-content/uploads/2023/12/deviatka-vaz-2109-1.webp',
-  },
-{
-    model: 'ГАЗ 2705',
-    cost: 800,
-    number: 'У087АС69',
-    transmission: 'Механика',
-    fuel: 'дизель',
-    trunkVolume: '800л',
-    engineVolume: '2.8л',
-    seats: 3,
-    mileage: '250000 км',
-    year: 2004,
-    color: 'Синий',
-    bodyType: 'Грузовой',
-    description: 'Для переезда',
-    image: 'https://st15.stblizko.ru/images/product/060/131/773_big.png',
-  },
-{
-    model: 'Texla X',
-    cost: 3000,
-    number: 'У111АС77',
-    transmission: 'Механика',
-    fuel: 'электро',
-    trunkVolume: '400л',
-    engineVolume: '2.0л',
-    seats: 5,
-    mileage: '2000 км',
-    year: 2020,
-    color: 'Белый',
-    bodyType: 'Кроссовер',
-    description: 'Прикоснись к технологиям',
-    image: 'https://moscowteslaclub.ru/upload/iblock/e4f/e4f8448f5597fd9af189a8b68d705da1.jpg',
-  },
-];
+
 
 const MainPage = () => {
-  const [cars] = useState(dummyCars);
+  const [cars, setCars] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const data = await CarService.getAll(); // или getAll() если без фильтра
+        setCars(data);
+      } catch (error) {
+        console.error("Ошибка при загрузке машин:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCars();
+  }, []);
 
   return (
     <div className="main-page">
@@ -229,9 +149,8 @@ const MainPage = () => {
       </aside>
 
       <section className="main-page__cards">
-        {cars.map((car, idx) => (
-          <Card key={idx} {...car} />
-        ))}
+        {cars.map(car => <Card key={car.id_car} {...car} />)
+}
       </section>
     </div>
   );
