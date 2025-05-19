@@ -18,6 +18,9 @@ const ManagerNavBar = () => {
         {/* <div className="menu-header__item" onClick={() => navigate('/mainpage')}>
           <div className="menu-header__text">Управление автопарком</div>
         </div> */}
+        <div className="menu-header__item" onClick={() => navigate('/mainpage')}>
+          <div className="menu-header__text">Автопарк</div>
+        </div>
         <div className="menu-header__item" onClick={() => navigate('/archive')}>
           <div className="menu-header__text">Архив</div>
         </div>

@@ -13,6 +13,18 @@ class Role(enum.Enum):
     worker = "worker"
     manager = "manager"
 
+class CarStatus(enum.Enum):
+    free = "free"
+    booked = "booked"
+    inrent = "inrent"
+    repair = "repair"
+    off = "off"
+
+class ContractStatus(enum.Enum):
+    created = "created"
+    approved = "approved"
+    closed = "closed"
+
 class Brand(Base):
     __tablename__ = "brands"
 
@@ -56,7 +68,7 @@ class Car(Base):
     mileage: Mapped[int]
     description: Mapped[Optional[str]] = mapped_column(Text)
     cost_day: Mapped[int]
-    is_rented: Mapped[bool] = mapped_column(Boolean, default=True)
+    is_rented: Mapped[CarStatus] = mapped_column(SQLEnum(CarStatus, name="carstatus"), default=CarStatus.free)
     image_path: Mapped[Optional[str]] = mapped_column(String(255))
 
     model = relationship("Model", back_populates="cars")
@@ -92,12 +104,15 @@ class User(Base):
     name: Mapped[str] = mapped_column(String(50), nullable=False)
     l_name: Mapped[str] = mapped_column(String(50), nullable=False)
     telephone: Mapped[int] = mapped_column(Numeric(10), nullable=False)
-    n_passport: Mapped[int] = mapped_column(Numeric(4), nullable=False)
-    s_passport: Mapped[int] = mapped_column(Numeric(6), nullable=False)
-    n_vu: Mapped[int] = mapped_column(Numeric(20), nullable=False)
+    n_passport: Mapped[int] = mapped_column(Numeric(5), nullable=False)
+    s_passport: Mapped[int] = mapped_column(Numeric(7), nullable=False)
+    n_vu: Mapped[int] = mapped_column(Numeric(11), nullable=False)
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(String(255), nullable=False)
-    role: Mapped[Role] = mapped_column(default=Role.user)
+    role: Mapped[Role] = mapped_column(SQLEnum(Role, name="role", create_constraint=False), default=Role.user)
+
+
+
 
 
     returns = relationship("ReturnCar", back_populates="user")
@@ -123,7 +138,8 @@ class Contract(Base):
     end_date: Mapped[datetime] = mapped_column(TIMESTAMP, nullable=False)
     total_cost: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     id_ins: Mapped[Optional[int]] = mapped_column(ForeignKey("insurance.id_ins"), nullable=True) 
-    status: Mapped[str] = mapped_column(String(50), default="active")
+    status: Mapped[ContractStatus] = mapped_column(SQLEnum(ContractStatus, name="contractstatus", create_constraint=True), nullable=False, default=ContractStatus.created)
+
 
     user = relationship("User", back_populates="contracts", lazy="selectin")
     car = relationship("Car", back_populates="contracts", lazy="selectin")

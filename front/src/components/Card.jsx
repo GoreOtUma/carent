@@ -31,7 +31,6 @@ const Card = ({
 
   const handleRentClick = (e) => {
     e.stopPropagation();
-    if (user?.role === "user") {
       navigate('/contract', { 
         state: {
           carData: {
@@ -53,9 +52,6 @@ const Card = ({
           }
         }
       });
-    } else {
-      navigate('/signin'); // Перенаправляем на страницу входа
-    }
   };
 
   return (
@@ -92,16 +88,18 @@ const Card = ({
             <p><b>Кузов:</b> {bodyType}</p>
             <p><b>Описание:</b> {description}</p>
           </div>
-          <div className="to-rent">
-            <MyButton 
-              className="button-registration auth" 
-              type="button"
-              onClick={handleRentClick}
-              disabled={!user || user.role !== "user"}
-            >
-              {(user?.role === "user" || user?.role === "worker" ) ? "Арендовать" : "Войдите для аренды"}
-            </MyButton>
-          </div>
+           {user?.role !== "worker" ?
+            <div className="to-rent">
+              <MyButton 
+                className="button-registration auth" 
+                type="button"
+                onClick={handleRentClick}
+              >
+                Арендовать
+              </MyButton>
+            </div>
+            :
+            <></>}
         </>
       )}
     </div>
