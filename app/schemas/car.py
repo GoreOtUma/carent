@@ -13,7 +13,7 @@ class CarCreate(BaseModel):
     id_fuel: int
     id_carcase: int
     trunk_volume: int
-    engine_volume: int
+    engine_volume: float  
     seating_capacity: int
     color: str = Field(..., max_length=50)
     mileage: int
@@ -33,7 +33,7 @@ class CarUpdate(BaseModel):
     id_fuel: Optional[int] = None
     id_carcase: Optional[int] = None
     trunk_volume: Optional[int] = None
-    engine_volume: Optional[int] = None
+    engine_volume: Optional[float] = None
     seating_capacity: Optional[int] = None
     color: Optional[str] = Field(None, max_length=50)
     mileage: Optional[int] = None
@@ -54,7 +54,7 @@ class CarResponse(BaseModel):
     fuel: FuelResponse
     carcase: CarcaseResponse
     trunk_volume: int
-    engine_volume: int
+    engine_volume: float  
     seating_capacity: int
     color: str
     mileage: int
