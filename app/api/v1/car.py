@@ -5,6 +5,7 @@ from datetime import datetime
 from crud import car as CarService
 from db.session import get_session
 from schemas.car import CarCreate, CarResponse, CarUpdate
+from fastapi import Query
 
 router = APIRouter()
 
@@ -48,8 +49,16 @@ async def update_car(
 
 @router.get("/available-cars", response_model=List[CarResponse], summary="Получение доступных автомобилей", tags=["Автомобили"])
 async def get_available_cars(
+    start_date: datetime = Query(..., description="Начальная дата периода аренды"),
+    end_date: datetime = Query(..., description="Конечная дата периода аренды"),
     skip: int = 0,
     limit: int = 100,
     db: AsyncSession = Depends(get_session)
 ):
-    return await CarService.get_available_cars(db, skip=skip, limit=limit)
+    return await CarService.get_available_cars(
+        db=db,
+        start_date=start_date,
+        end_date=end_date,
+        skip=skip,
+        limit=limit
+    )
