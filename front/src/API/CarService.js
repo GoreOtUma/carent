@@ -6,6 +6,16 @@ export default class CarService {
     return res.data;
   }
 
+  static async getAvailable(startDate, endDate) {
+    const res = await api.get("available-cars", {
+      params: {
+        start_date: startDate,
+        end_date: endDate
+      }
+    });
+    return res.data;
+  }
+
   static async getByFreecar() {
     const res = await api.get("available-cars");
     return res.data;

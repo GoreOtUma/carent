@@ -35,11 +35,30 @@ const MainPage = () => {
   const [fuels, setFuels] = useState([]);
   const [carcases, setCarcases] = useState([]);
   const [brands, setBrands] = useState([]);
+  const hasPartialDateRange = (filters.dateFrom && !filters.dateTo) || (!filters.dateFrom && filters.dateTo);
 
   // Получаем все машины и справочники один раз
   useEffect(() => {
     const fetchAll = async () => {
-      const cars = await CarService.getAll(); // БЕЗ фильтров
+      const partialRange = (filters.dateFrom && !filters.dateTo) || (!filters.dateFrom && filters.dateTo);
+      
+      if (partialRange) {
+        setAllCars([]);
+        setFilteredCars([]);
+        return;
+      }
+    let cars;
+
+    if (filters.dateFrom && filters.dateTo) {
+      // Если заданы даты - запрашиваем только доступные машины
+      cars = await CarService.getAvailable(
+        filters.dateFrom, 
+        filters.dateTo
+      );
+    } else {
+      // Если даты не заданы - запрашиваем все машины
+      cars = await CarService.getAll();
+    }
       setAllCars(cars);
       setFilteredCars(cars);
 
@@ -49,7 +68,7 @@ const MainPage = () => {
       setBrands(await BrandService.getAll());
     };
     fetchAll();
-  }, []);
+  }, [filters.dateFrom, filters.dateTo]);
 
   // Фильтрация при изменении фильтров
   useEffect(() => {
@@ -63,15 +82,20 @@ const MainPage = () => {
           colors, engineMin, engineMax, trunkMin, trunkMax,
           carcasses, brand
         } = filters;
-  
+        
+        if (!filters.dateFrom && !filters.dateTo) {
+          if (car.is_rented === 'off' || car.is_rented === 'repair' || car.is_rented === 'inrent') {
+            return false;
+          }
+        }
         const price = car.cost_day;
         if (priceMin && price < priceMin) return false;
         if (priceMax && price > priceMax) return false;
   
-        if (transmissions.length && !transmissions.includes(car.transmission.name_trans)) return false;
-        if (fuels.length && !fuels.includes(car.fuel.name_fuel)) return false;
-        if (carcasses.length && !carcasses.includes(car.carcase.name_carcase)) return false;
-        if (colors.length && !colors.includes(car.color)) return false;
+        if (transmissions.length && !transmissions.some(filterTrans => car.transmission.name_trans.toLowerCase() === filterTrans.toLowerCase())) return false;
+        if (fuels.length && !fuels.some(filterFuel => car.fuel.name_fuel.toLowerCase() === filterFuel.toLowerCase())) return false;
+        if (carcasses.length && !carcasses.some(filterCarcase => car.carcase.name_carcase.toLowerCase() === filterCarcase.toLowerCase())) return false;
+        if (colors.length && !colors.some(filterColor => car.color.toLowerCase() === filterColor.toLowerCase())) return false;
         if (seats.length && !seats.includes(car.seating_capacity)) return false;
   
         if (brand && car.model.brand.name_brand !== brand) return false;
@@ -117,6 +141,11 @@ const MainPage = () => {
       <aside className="filters">
         <div className="filter-section">
           <h3 className="section-title">Даты аренды</h3>
+          {hasPartialDateRange && (
+            <div className="date-error-message">
+              Пожалуйста, выберите полный период аренды
+            </div>
+          )}
           <div className="date-range">
             <div className="date-input">
               <span>От</span>
@@ -131,8 +160,11 @@ const MainPage = () => {
 
         <div className="filter-section">
           <h3 className="section-title">Цена, ₽</h3>
-          <input type="number" className="filter-input" placeholder="Min" value={filters.priceMin} onChange={(e) => handleInputChange('priceMin', e.target.value)} />
-          <input type="number" className="filter-input" placeholder="Max" value={filters.priceMax} onChange={(e) => handleInputChange('priceMax', e.target.value)} />
+          <div className="price-range">
+            <input type="number" className="filter-input" placeholder="Min" value={filters.priceMin} onChange={(e) => handleInputChange('priceMin', e.target.value)} />
+            <span>-</span>
+            <input type="number" className="filter-input" placeholder="Max" value={filters.priceMax} onChange={(e) => handleInputChange('priceMax', e.target.value)} />
+          </div>
         </div>
 
         <div className="filter-section">
@@ -157,8 +189,10 @@ const MainPage = () => {
 
         <div className="filter-section">
           <h3 className="section-title">Пробег, км</h3>
-          <input type="number" placeholder="От" value={filters.mileageMin} onChange={(e) => handleInputChange('mileageMin', e.target.value)} />
-          <input type="number" placeholder="До" value={filters.mileageMax} onChange={(e) => handleInputChange('mileageMax', e.target.value)} />
+          <div className="range-inputs">
+            <input type="number" className="filter-input" placeholder="От" value={filters.mileageMin} onChange={(e) => handleInputChange('mileageMin', e.target.value)} />
+            <input type="number" className="filter-input" placeholder="До" value={filters.mileageMax} onChange={(e) => handleInputChange('mileageMax', e.target.value)} />
+          </div>
         </div>
 
         <div className="filter-section">
@@ -173,8 +207,10 @@ const MainPage = () => {
 
         <div className="filter-section">
           <h3 className="section-title">Год выпуска</h3>
-          <input type="number" placeholder="От" value={filters.yearMin} onChange={(e) => handleInputChange('yearMin', e.target.value)} />
-          <input type="number" placeholder="До" value={filters.yearMax} onChange={(e) => handleInputChange('yearMax', e.target.value)} />
+          <div className="range-inputs">
+            <input type="number" className="filter-input" placeholder="От" value={filters.yearMin} onChange={(e) => handleInputChange('yearMin', e.target.value)} />
+            <input type="number" className="filter-input" placeholder="До" value={filters.yearMax} onChange={(e) => handleInputChange('yearMax', e.target.value)} />
+          </div>
         </div>
 
         <div className="filter-section">
@@ -189,14 +225,18 @@ const MainPage = () => {
 
         <div className="filter-section">
           <h3 className="section-title">Объём двигателя</h3>
-          <input type="number" placeholder="От" value={filters.engineMin} onChange={(e) => handleInputChange('engineMin', e.target.value)} />
-          <input type="number" placeholder="До" value={filters.engineMax} onChange={(e) => handleInputChange('engineMax', e.target.value)} />
+          <div className="range-inputs">
+            <input type="number" className="filter-input" placeholder="От" value={filters.engineMin} onChange={(e) => handleInputChange('engineMin', e.target.value)} />
+            <input type="number" className="filter-input" placeholder="До" value={filters.engineMax} onChange={(e) => handleInputChange('engineMax', e.target.value)} />
+          </div>
         </div>
 
         <div className="filter-section">
           <h3 className="section-title">Объём багажника</h3>
-          <input type="number" placeholder="От" value={filters.trunkMin} onChange={(e) => handleInputChange('trunkMin', e.target.value)} />
-          <input type="number" placeholder="До" value={filters.trunkMax} onChange={(e) => handleInputChange('trunkMax', e.target.value)} />
+          <div className="range-inputs">
+            <input type="number" className="filter-input" placeholder="От" value={filters.trunkMin} onChange={(e) => handleInputChange('trunkMin', e.target.value)} />
+            <input type="number" className="filter-input" placeholder="До" value={filters.trunkMax} onChange={(e) => handleInputChange('trunkMax', e.target.value)} />
+          </div>
         </div>
 
         <div className="filter-section">
@@ -221,7 +261,17 @@ const MainPage = () => {
       </aside>
 
       <section className="main-page__cards">
-        {filteredCars.map(car => <Card key={car.id_car} {...car} />)}
+        {hasPartialDateRange ? (
+          <div className="empty-list-message">
+            Выберите полный период аренды для отображения доступных автомобилей
+          </div>
+        ) : filteredCars.length > 0 ? (
+          filteredCars.map(car => <Card key={car.id_car} {...car} />)
+        ) : (
+          <div className="empty-list-message">
+            Нет автомобилей, соответствующих выбранным фильтрам
+          </div>
+        )}
       </section>
     </div>
   );

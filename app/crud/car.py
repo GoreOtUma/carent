@@ -63,15 +63,16 @@ async def get_available_cars(
     rented_cars_subquery = (
         select(Contract.id_car)
         .where(
-            and_(
-                    and_(
-                        Contract.start_date <= end_date,
-                        Contract.end_date >= start_date
-                    ),
-                    and_(
-                        Contract.start_date >= start_date,
-                        Contract.end_date <= end_date
-                    )
+            # Правильное условие проверки пересечения периодов
+            or_(
+                and_(
+                    Contract.start_date <= end_date,
+                    Contract.end_date >= start_date
+                ),
+                and_(
+                    Contract.start_date >= start_date,
+                    Contract.end_date <= end_date
+                )
             )
         )
         .distinct()
