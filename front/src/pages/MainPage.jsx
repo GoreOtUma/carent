@@ -1,26 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/MainPage.css';
 import Card from '../components/Card';
+import CarService from '../API/CarService';
 
 const dummyCars = [
   {
-    model: 'Toyota Carina E',
-    cost: 500,
-    number: 'У724ТС43',
-    transmission: 'Механика',
-    fuel: 'бензин',
-    trunkVolume: '500л',
-    engineVolume: '2.0л',
-    seats: 5,
-    mileage: '42000 км',
-    year: 1993,
-    color: 'серый',
-    bodyType: 'Серый',
-    description: 'Не машина, а мечта!',
-    image: 'https://www.automoli.com/common/vehicles/_assets/img/gallery/f38/toyota-carina-e-t19.jpg',
-  },
-  {
-    model: 'Volkswagen Golf',
+    /*model: 'Volkswagen Golf',
     cost: 1000,
     number: 'А870СУ43',
     transmission: 'Механика',
@@ -98,11 +83,27 @@ const dummyCars = [
     bodyType: 'Кроссовер',
     description: 'Прикоснись к технологиям',
     image: 'https://moscowteslaclub.ru/upload/iblock/e4f/e4f8448f5597fd9af189a8b68d705da1.jpg',
-  },
+*/},
 ];
 
 const MainPage = () => {
-  const [cars] = useState(dummyCars);
+  const [cars, setCars] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const data = await CarService.getAll(); // или getAll() если без фильтра
+        setCars(data);
+      } catch (error) {
+        console.error("Ошибка при загрузке машин:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCars();
+  }, []);
 
   return (
     <div className="main-page">
