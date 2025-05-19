@@ -19,7 +19,7 @@ class CarCreate(BaseModel):
     mileage: int
     description: Optional[str] = None
     cost_day: int
-    is_rented: bool = True
+    is_rented: Optional[str]
     image_path: Optional[str] = Field(None, max_length=255)
     
     class Config:
@@ -39,7 +39,7 @@ class CarUpdate(BaseModel):
     mileage: Optional[int] = None
     description: Optional[str] = None
     cost_day: Optional[int] = None
-    is_rented: Optional[bool] = None
+    is_rented: Optional[str]
     image_path: Optional[str] = Field(None, max_length=255)
     
     class Config:
@@ -60,7 +60,7 @@ class CarResponse(BaseModel):
     mileage: int
     description: Optional[str]
     cost_day: int
-    is_rented: bool
+    is_rented: Optional[str]
     image_path: Optional[str]
 
     class Config:
