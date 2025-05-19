@@ -62,7 +62,7 @@ class Car(Base):
     id_fuel: Mapped[int] = mapped_column(ForeignKey("fuel.id_fuel"))
     id_carcase: Mapped[int] = mapped_column(ForeignKey("carcases.id_carcase"))
     trunk_volume: Mapped[int]
-    engine_volume: Mapped[int]
+    engine_volume: Mapped[int] = mapped_column(Numeric(7, 2), nullable=False)
     seating_capacity: Mapped[int]
     color: Mapped[str] = mapped_column(String(50))
     mileage: Mapped[int]
