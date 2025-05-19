@@ -106,3 +106,23 @@ async def delete_contract(contract_id: int, db: AsyncSession) -> bool:
             detail=f"Ошибка при удалении контракта: {str(e)}"
         )
     return True
+async def get_all_contracts(
+    db: AsyncSession,
+    skip: int = 0,
+    limit: int = 100
+) -> List[Contract]:
+    result = await db.execute(
+        select(Contract)
+        .options(
+            selectinload(Contract.user),
+            selectinload(Contract.car).selectinload(Car.model),
+            selectinload(Contract.car).selectinload(Car.fuel),
+            selectinload(Contract.car).selectinload(Car.transmission),
+            selectinload(Contract.car).selectinload(Car.carcase),
+            selectinload(Contract.insurance)
+        )
+        .order_by(Contract.start_date.desc())
+        .offset(skip)
+        .limit(limit)
+    )
+    return result.scalars().all()

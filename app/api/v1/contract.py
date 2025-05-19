@@ -32,6 +32,14 @@ async def get_user_contracts(
 ):
     return await ContractService.get_user_contracts(user_id, db)
 
+@router.get("/contracts", response_model=List[ContractResponse], summary="Получение всех контрактов", tags=["Контракты"])
+async def get_all_contracts(
+    skip: int = Query(0, description="Количество записей для пропуска"),
+    limit: int = Query(100, description="Лимит записей"),
+    db: AsyncSession = Depends(get_session)
+):
+    return await ContractService.get_all_contracts(db, skip=skip, limit=limit)
+
 @router.put("/contracts/{contract_id}", response_model=ContractResponse, summary="Обновление контракта", tags=["Контракты"])
 async def update_contract(
     contract_id: int,
