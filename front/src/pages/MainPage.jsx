@@ -81,7 +81,7 @@ const dummyCars = [
     color: 'Синий',
     bodyType: 'Грузовой',
     description: 'Для переезда',
-    image: 'https://lh3.googleusercontent.com/proxy/Q0QVsdNptuor2pj4_vQL3I_HvuHbm6sREham6ICLpoLDkS36Tu6KDSOwesiQDPnXmMXxpS966uS8RO4BEGUgyNiG8TvfmILxMluN__yKJvTbYEPvh2ZL5oyk1Bs',
+    image: 'https://st15.stblizko.ru/images/product/060/131/773_big.png',
   },
 {
     model: 'Texla X',

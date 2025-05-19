@@ -75,7 +75,7 @@ const SignUp = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="registration__inputs">
           <div className="surname-input">
             <MyInput
-              {...register("l_name", {
+              {...register("f_name", {
                 required: "Поле обязательно к заполнению",
                 minLength: { value: 1, message: "Фамилия не может быть пустой" },
                 maxLength: { value: 50, message: "Слишком длинная фамилия" },
@@ -83,15 +83,15 @@ const SignUp = () => {
               label="Фамилия"
               type="text"
               placeholder="Введите фамилию"
-              id="l_name"
-              name="l_name"
+              id="f_name"
+              name="f_name"
             />
           </div>
-          {errors?.l_name && <p style={{ color: "red" }}>{errors?.l_name?.message}</p>}
+          {errors?.f_name && <p style={{ color: "red" }}>{errors?.f_name?.message}</p>}
 
           <div className="name-input">
             <MyInput
-              {...register("f_name", {
+              {...register("name", {
                 required: "Поле обязательно к заполнению",
                 minLength: { value: 1, message: "Имя не может быть пустым" },
                 maxLength: { value: 50, message: "Слишком длинное имя" },
@@ -99,25 +99,25 @@ const SignUp = () => {
               label="Имя"
               type="text"
               placeholder="Введите имя"
-              id="f_name"
-              name="f_name"
-            />
-          </div>
-          {errors?.f_name && <p style={{ color: "red" }}>{errors?.f_name?.message}</p>}
-
-          <div className="patronimic-input">
-            <MyInput
-              {...register("name", {
-                required: "Поле обязательно к заполнению",
-              })}
-              label="Отчество"
-              type="text"
-              placeholder="Введите отчество"
               id="name"
               name="name"
             />
           </div>
           {errors?.name && <p style={{ color: "red" }}>{errors?.name?.message}</p>}
+
+          <div className="patronimic-input">
+            <MyInput
+              {...register("l_name", {
+                required: "Поле обязательно к заполнению",
+              })}
+              label="Отчество"
+              type="text"
+              placeholder="Введите отчество"
+              id="l_name"
+              name="l_name"
+            />
+          </div>
+          {errors?.l_name && <p style={{ color: "red" }}>{errors?.l_name?.message}</p>}
 
           <div className="email-input">
             <MyInput
@@ -160,7 +160,7 @@ const SignUp = () => {
             <MyInput
               {...register("s_passport", {
                 required: "Поле обязательно к заполнению",
-                minLength: { value: 1, message: "Паспорт должен содержать 10 цифр" },
+                minLength: { value: 1, message: "Серия паспорта должена содержать 4 цифры" },
                 pattern: {
                   value: /^[0-9]+$/,
                   message: "Допускаются только цифры"
@@ -179,13 +179,13 @@ const SignUp = () => {
             <MyInput
               {...register("n_passport", {
                 required: "Поле обязательно к заполнению",
-                minLength: { value: 1, message: "Паспорт должен содержать 10 цифр" },
+                minLength: { value: 1, message: "Номер паспорта должен содержать 6 цифр" },
                 pattern: {
                   value: /^[0-9]+$/,
                   message: "Допускаются только цифры"
                 },
               })}
-              label="номер паспорта"
+              label="Номер паспорта"
               type="text"
               placeholder="Введите номер паспорта"
               id="n_passport"
@@ -219,7 +219,7 @@ const SignUp = () => {
                 required: "Поле обязательно к заполнению",
                 minLength: { value: 8, message: "Пароль должен быть не меньше 8 символов" },
                 pattern: {
-                  value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{5,}$/,
+                  value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/,
                   message: "Пароль должен содержать хотя бы одну заглавную букву, одну строчную и одну цифру",
                 },
               })}
