@@ -3,6 +3,7 @@ import MyButton from '../components/UI/button/MyButton';
 import ContractService from '../API/ContractService';
 import ModelService from '../API/ModelService';
 import { useAuth } from '../context/AuthContext';
+import formatDateTime from '../utils/formatDateTime';
 
 const ArchiveUser = () => {
   const { user } = useAuth();
@@ -81,13 +82,6 @@ const ArchiveUser = () => {
     setFilteredContracts(contracts);
   };
 
-  const formatDateRange = (start, end) => {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    const startFormatted = new Date(start).toLocaleString('ru-RU', options);
-    const endFormatted = new Date(end).toLocaleString('ru-RU', options);
-    return `${startFormatted} — ${endFormatted}`;
-  };
-
   return (
     <div className="archive-page">
       <h1>Архив моих контрактов</h1>
@@ -164,7 +158,7 @@ const ArchiveUser = () => {
                       {contract.car.model.brand.name_brand} {contract.car.model.name_model}
                     </strong>
                   </div>
-                  <div>{formatDateRange(contract.start_date, contract.end_date)}</div>
+                  <div>{formatDateTime(contract.start_date, contract.end_date)}</div>
                   <div>
                     {contract.insurance?.type_ins || 'Без страховки'} <span>страховка</span>
                   </div>
