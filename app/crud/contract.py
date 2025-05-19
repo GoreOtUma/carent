@@ -8,6 +8,33 @@ from schemas.contract import ContractCreate, ContractUpdate
 
 
 async def create_contract(data: ContractCreate, db: AsyncSession) -> Contract:
+    # Проверка корректности дат
+    if data.end_date <= data.start_date:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Дата окончания должна быть позже даты начала"
+        )
+
+    # Находим машину с подгрузкой связей
+    car_result = await db.execute(
+        select(Car)
+        .options(
+            selectinload(Car.model),
+            selectinload(Car.transmission),
+            selectinload(Car.fuel),
+            selectinload(Car.carcase)
+        )
+        .where(Car.id_car == data.id_car)
+    )
+    car = car_result.scalar_one_or_none()
+    if not car:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Машина не найдена"
+        )
+    car.is_rented = "booked"
+
+    # Создаем контракт
     contract = Contract(
         id_user=data.id_user,
         id_car=data.id_car,
@@ -17,7 +44,7 @@ async def create_contract(data: ContractCreate, db: AsyncSession) -> Contract:
         id_ins=data.id_ins,
         status=data.status
     )
-    
+
     try:
         db.add(contract)
         await db.commit()
@@ -29,6 +56,7 @@ async def create_contract(data: ContractCreate, db: AsyncSession) -> Contract:
             detail=f"Ошибка при создании контракта: {str(e)}"
         )
     return contract
+
 
 async def get_user_contracts(user_id: int, db: AsyncSession) -> List[Contract]:
     result = await db.execute(
