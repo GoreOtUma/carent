@@ -52,12 +52,17 @@ const MainPage = () => {
         cars = await CarService.getAvailable(filters.dateFrom, filters.dateTo);
       } else {
         cars = await CarService.getAll();
-        // отфильтруем только свободные, если нет дат
         cars = cars.filter(car => car.is_rented === "free");
       }
   
-      setAllCars(cars);
-      setFilteredCars(cars);
+      // ✅ Нормализуем id
+      const normalizedCars = cars.map(car => ({
+        ...car,
+        id: car.id_car
+      }));
+  
+      setAllCars(normalizedCars);
+      setFilteredCars(normalizedCars);
   
       setTransmissions(await TransmissionService.getAll());
       setFuels(await FuelService.getAll());
@@ -68,6 +73,7 @@ const MainPage = () => {
     fetchAll();
   }, []);
   
+
 
   // Фильтрация при изменении фильтров
   useEffect(() => {
@@ -160,9 +166,9 @@ const MainPage = () => {
         <div className="filter-section">
           <h3 className="section-title">Цена, ₽</h3>
           <div className="price-range">
-            <input type="number" className="filter-input" placeholder="Min" min={0} value={filters.priceMin} onChange={(e) => handleInputChange('priceMin', e.target.value)} />
+            <input type="number" className="filter-input" placeholder="Min" value={filters.priceMin} onChange={(e) => handleInputChange('priceMin', e.target.value)} />
             <span>-</span>
-            <input type="number" className="filter-input" placeholder="Max" min={0} value={filters.priceMax} onChange={(e) => handleInputChange('priceMax', e.target.value)} />
+            <input type="number" className="filter-input" placeholder="Max" value={filters.priceMax} onChange={(e) => handleInputChange('priceMax', e.target.value)} />
           </div>
         </div>
 
@@ -189,8 +195,8 @@ const MainPage = () => {
         <div className="filter-section">
           <h3 className="section-title">Пробег, км</h3>
           <div className="range-inputs">
-            <input type="number" className="filter-input" min={0} placeholder="От" value={filters.mileageMin} onChange={(e) => handleInputChange('mileageMin', e.target.value)} />
-            <input type="number" className="filter-input" min={0} placeholder="До" value={filters.mileageMax} onChange={(e) => handleInputChange('mileageMax', e.target.value)} />
+            <input type="number" className="filter-input" placeholder="От" value={filters.mileageMin} onChange={(e) => handleInputChange('mileageMin', e.target.value)} />
+            <input type="number" className="filter-input" placeholder="До" value={filters.mileageMax} onChange={(e) => handleInputChange('mileageMax', e.target.value)} />
           </div>
         </div>
 
@@ -207,8 +213,8 @@ const MainPage = () => {
         <div className="filter-section">
           <h3 className="section-title">Год выпуска</h3>
           <div className="range-inputs">
-            <input type="number" className="filter-input" min={0} placeholder="От" value={filters.yearMin} onChange={(e) => handleInputChange('yearMin', e.target.value)} />
-            <input type="number" className="filter-input" min={0} placeholder="До" value={filters.yearMax} onChange={(e) => handleInputChange('yearMax', e.target.value)} />
+            <input type="number" className="filter-input" placeholder="От" value={filters.yearMin} onChange={(e) => handleInputChange('yearMin', e.target.value)} />
+            <input type="number" className="filter-input" placeholder="До" value={filters.yearMax} onChange={(e) => handleInputChange('yearMax', e.target.value)} />
           </div>
         </div>
 
@@ -225,16 +231,16 @@ const MainPage = () => {
         <div className="filter-section">
           <h3 className="section-title">Объём двигателя</h3>
           <div className="range-inputs">
-            <input type="number" className="filter-input" min={0} placeholder="От" value={filters.engineMin} onChange={(e) => handleInputChange('engineMin', e.target.value)} />
-            <input type="number" className="filter-input" min={0} placeholder="До" value={filters.engineMax} onChange={(e) => handleInputChange('engineMax', e.target.value)} />
+            <input type="number" className="filter-input" placeholder="От" value={filters.engineMin} onChange={(e) => handleInputChange('engineMin', e.target.value)} />
+            <input type="number" className="filter-input" placeholder="До" value={filters.engineMax} onChange={(e) => handleInputChange('engineMax', e.target.value)} />
           </div>
         </div>
 
         <div className="filter-section">
           <h3 className="section-title">Объём багажника</h3>
           <div className="range-inputs">
-            <input type="number" className="filter-input" min={0} placeholder="От" value={filters.trunkMin} onChange={(e) => handleInputChange('trunkMin', e.target.value)} />
-            <input type="number" className="filter-input" min={0} placeholder="До" value={filters.trunkMax} onChange={(e) => handleInputChange('trunkMax', e.target.value)} />
+            <input type="number" className="filter-input" placeholder="От" value={filters.trunkMin} onChange={(e) => handleInputChange('trunkMin', e.target.value)} />
+            <input type="number" className="filter-input" placeholder="До" value={filters.trunkMax} onChange={(e) => handleInputChange('trunkMax', e.target.value)} />
           </div>
         </div>
 
