@@ -116,7 +116,6 @@ async def update_contract(contract_id: int, data: ContractUpdate, db: AsyncSessi
         setattr(contract, field, value)
 
     try:
-        # Явно загружаем машину из БД
         car = await db.get(Car, contract.id_car)
 
         if change_type == "approve":
@@ -132,6 +131,10 @@ async def update_contract(contract_id: int, data: ContractUpdate, db: AsyncSessi
             )
             db.add(return_data)
 
+        elif change_type == "deny":
+            car.is_rented = "free"
+            contract.status = "denied"
+
         await db.commit()
         await db.refresh(contract)
     except Exception as e:
@@ -142,6 +145,7 @@ async def update_contract(contract_id: int, data: ContractUpdate, db: AsyncSessi
         )
 
     return contract
+
 
 
 async def delete_contract(contract_id: int, db: AsyncSession) -> bool:
