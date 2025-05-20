@@ -40,35 +40,34 @@ const MainPage = () => {
   // Получаем все машины и справочники один раз
   useEffect(() => {
     const fetchAll = async () => {
-      const partialRange = (filters.dateFrom && !filters.dateTo) || (!filters.dateFrom && filters.dateTo);
-      
-      if (partialRange) {
+      if (hasPartialDateRange) {
         setAllCars([]);
         setFilteredCars([]);
         return;
       }
-    let cars;
-
-    if (filters.dateFrom && filters.dateTo) {
-      // Если заданы даты - запрашиваем только доступные машины
-      cars = await CarService.getAvailable(
-        filters.dateFrom, 
-        filters.dateTo
-      );
-    } else {
-      // Если даты не заданы - запрашиваем все машины
-      cars = await CarService.getAll();
-    }
+  
+      let cars;
+  
+      if (filters.dateFrom && filters.dateTo) {
+        cars = await CarService.getAvailable(filters.dateFrom, filters.dateTo);
+      } else {
+        cars = await CarService.getAll();
+        // отфильтруем только свободные, если нет дат
+        cars = cars.filter(car => car.is_rented === "free");
+      }
+  
       setAllCars(cars);
       setFilteredCars(cars);
-
+  
       setTransmissions(await TransmissionService.getAll());
       setFuels(await FuelService.getAll());
       setCarcases(await CarcaseService.getAll());
       setBrands(await BrandService.getAll());
     };
+  
     fetchAll();
-  }, [filters.dateFrom, filters.dateTo]);
+  }, []);
+  
 
   // Фильтрация при изменении фильтров
   useEffect(() => {

@@ -1,93 +1,147 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MyButton from '../components/UI/button/MyButton';
+import ContractService from '../API/ContractService';
+import BrandService from '../API/BrandService';
 import '../styles/Archive.css';
+import formatDateTime from '../utils/formatDateTime'; // путь скорректируй по структуре проекта
+
 
 const ArchiveWorker = () => {
   const [activeTab, setActiveTab] = useState('archived');
+  const [contracts, setContracts] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const [filteredContracts, setFilteredContracts] = useState(null);
 
-  const archivedContracts = [
-    { id : 3, brand: 'Toyota Carina', name: 'Иванов Иван Иванович', email: 'prok@rent.com', price: '5000', period: '12.12.2005 15:00 — 05.01.2006 15:00', insurance: 'Базовая' },
-    { id : 5, brand: 'Toyota Carina', name: 'Иванов Иван Иванович', email: 'prok@rent.com', price: '5000', period: '12.12.2006 15:00 — 05.01.2007 15:00', insurance: 'Базовая' },
-    { id : 7, brand: 'Toyota Carina', name: 'Иванов Иван Иванович', email: 'prok@rent.com', price: '5000', period: '12.12.2007 15:00 — 05.01.2008 15:00', insurance: 'Базовая' },
-  ];
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [selectedBrand, setSelectedBrand] = useState('');
 
-  const currentContracts = archivedContracts.map(contract => ({
-    ...contract,
-    button: 'Закрыть контракт',
-  }));
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [contractData, brandData] = await Promise.all([
+          ContractService.getAll(),
+          BrandService.getAll()
+        ]);
+        setContracts(contractData);
+        setBrands(brandData);
+      } catch (error) {
+        console.error('Ошибка при загрузке данных:', error);
+      }
+    };
+    fetchData();
+  }, []);
 
-  const contracts = activeTab === 'archived' ? archivedContracts : currentContracts;
+  const getDisplayContracts = () => {
+    const base = filteredContracts ?? contracts;
+    return base.filter(c => {
+      if (activeTab === 'archived') {
+        return c.status?.toLowerCase() === 'closed';
+      } else {
+        const status = c.status?.toLowerCase();
+        return status === 'created' || status === 'approved';
+      }
+      
+    });
+  };
+
+  const handleFilter = () => {
+    const filtered = contracts.filter(contract => {
+      const contractStart = new Date(contract.start_date);
+      const contractEnd = new Date(contract.end_date);
+
+      const matchesStart = startDate ? new Date(startDate) <= contractEnd : true;
+      const matchesEnd = endDate ? new Date(endDate) >= contractStart : true;
+      const matchesBrand = selectedBrand
+        ? contract.car?.model?.brand?.name_brand.toLowerCase().includes(selectedBrand.toLowerCase())
+        : true;
+
+      return matchesStart && matchesEnd && matchesBrand;
+    });
+
+    setFilteredContracts(filtered);
+  };
+
+  const handleReset = () => {
+    setStartDate('');
+    setEndDate('');
+    setSelectedBrand('');
+    setFilteredContracts(null);
+  };
+
+  const displayContracts = getDisplayContracts();
 
   return (
     <div className="archive-worker-page archive-page">
       <div className="archive-page-main">
-      <div className="filters">
+        <div className="filters">
+          <div className="top-menu">
+            <button className={activeTab === 'archived' ? 'active' : ''} onClick={() => { setActiveTab('archived'); setFilteredContracts(null); }}>
+              Завершённые контракты
+            </button>
+            <button className={activeTab === 'current' ? 'active' : ''} onClick={() => { setActiveTab('current'); setFilteredContracts(null); }}>
+              Текущие контракты
+            </button>
+          </div>
 
-      <div className="top-menu">
-        <button
-          className={activeTab === 'archived' ? 'active' : ''}
-          onClick={() => setActiveTab('archived')}
-        >
-          Завершённые контракты
-        </button>
-        <button
-          className={activeTab === 'current' ? 'active' : ''}
-          onClick={() => setActiveTab('current')}
-        >
-          Текущие контракты
-        </button>
-      </div>
           <div className="filter-section">
-          <h3 className="section-title">Дата:</h3>
-          <div className="date-range">
-            <div className="date-input">
-              <span>От</span>
-              <input type="datetime-local" className="filter-input" />
-            </div>
-            <div className="date-input">
-              <span>До</span>
-              <input type="datetime-local" className="filter-input" />
+            <h3 className="section-title">Дата:</h3>
+            <div className="date-range">
+              <div className="date-input">
+                <span>От</span>
+                <input type="datetime-local" className="filter-input" value={startDate} onChange={e => setStartDate(e.target.value)} />
+              </div>
+              <div className="date-input">
+                <span>До</span>
+                <input type="datetime-local" className="filter-input" value={endDate} onChange={e => setEndDate(e.target.value)} />
+              </div>
             </div>
           </div>
-        </div>
-        <div className="filter-section">
-          <h3 className="section-title">Марка автомобиля</h3>
-          <select className="brand-select">
-            <option value="">Все марки</option>
-            {['Toyota', 'Honda', 'BMW', 'Audi', 'Volkswagen', 'Kia', 'Ford'].map((brand) => (
-              <option key={brand} value={brand.toLowerCase()}>{brand}</option>
-            ))}
-          </select>
-        </div> 
-        <div className="filter-section">
-          <MyButton className="filter-button">Фильтровать</MyButton>
-        </div>
-        <div className="filter-section">
-          <MyButton className="filter-button">Сбросить фильтр</MyButton>
-        </div>
-      </div>
 
+          <div className="filter-section">
+            <h3 className="section-title">Марка автомобиля</h3>
+            <select className="brand-select" value={selectedBrand} onChange={e => setSelectedBrand(e.target.value)}>
+              <option value="">Все марки</option>
+              {brands.map((brand) => (
+                <option key={brand.id_brand} value={brand.name_brand.toLowerCase()}>
+                  {brand.name_brand}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="filter-section">
+            <MyButton className="filter-button" onClick={handleFilter}>Фильтровать</MyButton>
+          </div>
+          <div className="filter-section">
+            <MyButton className="filter-button" onClick={handleReset}>Сбросить фильтр</MyButton>
+          </div>
+        </div>
 
         <div className="contract-list">
-          {contracts.map((contract, index) => (
-            <div className="contract-card" key={index}>
-            <div className="contract-card-main">
-                <div className="contract-brand"><strong>{contract.brand}</strong></div>
-                <div>{contract.name}</div>
-                <div>{contract.email}</div>
-                <div>{contract.period}</div>
-                <div>{contract.insurance}</div>
-            </div>
-            <div className="additional-left additional-left-many">
-              <div>{contract.id}</div>
-              <div>{contract.price} ₽</div>
-              {activeTab === 'current' ? (
+          {displayContracts.map((contract) => (
+            <div className="contract-card" key={contract.id_contr}>
+              <div className="contract-card-main">
+                <div className="contract-brand">
+                  <strong>{contract.car.model.brand.name_brand} {contract.car.model.name_model}</strong>
+                </div>
+                <div>
+                  {contract.user.l_name} {contract.user.name} {contract.user.f_name}
+                </div>
+                <div>{contract.user.email}</div>
+                <div>{formatDateTime(contract.start_date, contract.end_date)}</div>
+                <div>{contract.insurance.type_ins}</div>
+              </div>
+              <div className="additional-left additional-left-many">
+                <div>{contract.id_contr}</div>
+                <div>{contract.total_cost} ₽</div>
+                {activeTab === 'current' ? (
                   <MyButton className="close-button">Закрыть аренду</MyButton>
                 ) : (
-                  <MyButton className="fixion-button"></MyButton>
+                  <MyButton className="fixion-button" />
                 )}
+              </div>
             </div>
-          </div>
           ))}
         </div>
       </div>
