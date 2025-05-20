@@ -3,8 +3,7 @@ import MyButton from '../components/UI/button/MyButton';
 import ContractService from '../API/ContractService';
 import BrandService from '../API/BrandService';
 import '../styles/Archive.css';
-import formatDateTime from '../utils/formatDateTime'; // путь скорректируй по структуре проекта
-
+import formatDateTime from '../utils/formatDateTime'; 
 
 const ArchiveWorker = () => {
   const [activeTab, setActiveTab] = useState('archived');
@@ -142,6 +141,11 @@ const ArchiveWorker = () => {
                 )}
                 {activeTab === 'current' && contract.status?.toLowerCase() === 'created'? (
                   <MyButton className="close-button">Подтвердить аренду</MyButton>
+                ) : (
+                  <MyButton className="fixion-button" />
+                )}
+                {activeTab === 'current' && contract.status?.toLowerCase() === 'created'? (
+                  <MyButton className="close-button">Отклонить аренду</MyButton>
                 ) : (
                   <MyButton className="fixion-button" />
                 )}

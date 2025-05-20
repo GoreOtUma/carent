@@ -24,6 +24,7 @@ class ContractStatus(enum.Enum):
     created = "created"
     approved = "approved"
     closed = "closed"
+    denied = "denied"
 
 class Brand(Base):
     __tablename__ = "brands"
