@@ -44,6 +44,42 @@ const ArchiveWorker = () => {
       
     });
   };
+  const handleApprove = async (contract) => {
+    try {
+      await ContractService.updateStatus(contract.id_contr, {
+        status: 'approved',
+        change_type: 'approve'
+      });
+      refreshContracts();
+    } catch (e) {
+      console.error('Ошибка при подтверждении аренды:', e);
+    }
+  };
+  
+  
+  const handleClose = async (contract) => {
+    try {
+      await ContractService.updateStatus(contract.id_contr, {
+        status: 'closed',
+        change_type: 'close'
+      });
+      
+      refreshContracts();
+    } catch (e) {
+      console.error('Ошибка при закрытии аренды:', e);
+    }
+  };
+  
+  
+  const refreshContracts = async () => {
+    try {
+      const contractData = await ContractService.getAll();
+      setContracts(contractData);
+    } catch (e) {
+      console.error('Ошибка при обновлении контрактов:', e);
+    }
+  };
+  
 
   const handleFilter = () => {
     const filtered = contracts.filter(contract => {
@@ -135,16 +171,12 @@ const ArchiveWorker = () => {
               <div className="additional-left additional-left-many">
                 <div>{contract.id_contr}</div>
                 <div>{contract.total_cost} ₽</div>
-                {activeTab === 'current' && contract.status?.toLowerCase() === 'approved'? (
-                  <MyButton className="close-button">Закрыть аренду</MyButton>
-                ) : (
-                  <MyButton className="fixion-button" />
-                )}
-                {activeTab === 'current' && contract.status?.toLowerCase() === 'created'? (
-                  <MyButton className="close-button">Подтвердить аренду</MyButton>
-                ) : (
-                  <MyButton className="fixion-button" />
-                )}
+                {activeTab === 'current' && contract.status?.toLowerCase() === 'approved' ? (
+                <MyButton className="close-button" onClick={() => handleClose(contract)}>Закрыть аренду</MyButton>
+                ) : (<MyButton className="fixion-button" />)}
+                {activeTab === 'current' && contract.status?.toLowerCase() === 'created' ? (
+                <MyButton className="close-button" onClick={() => handleApprove(contract)}>Подтвердить аренду</MyButton>
+                ) : (<MyButton className="fixion-button" />)}
               </div>
             </div>
           ))}

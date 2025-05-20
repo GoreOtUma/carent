@@ -23,12 +23,14 @@ const Profile = () => {
             UserService.getById(id),
             ContractService.getAll()
           ]);
-  
           setUserData(user);
-  
           const approvedContract = allContracts.find(
-            (contract) => contract.user.id === id && contract.status === 'approved'
+            (contract) =>
+              contract.user?.telephone === user?.telephone && // сравниваем по номеру
+              contract.status?.toLowerCase() === 'approved'
           );
+          
+          
   
           setActiveContract(approvedContract || null);
         }
@@ -65,9 +67,8 @@ const Profile = () => {
           {activeContract ? (
             <>
               <p><strong>Название машины:</strong> {activeContract.car.model.brand.name_brand} {activeContract.car.model.name_model}</p>
-              <p><strong>Гос. номер:</strong> {activeContract.car.gov_number}</p>
-              <p><strong>Дата начала:</strong> {formatDateTime(activeContract.start_date)}</p>
-              <p><strong>Дата окончания:</strong> {formatDateTime(activeContract.end_date)}</p>
+              <p><strong>Гос. номер:</strong> {activeContract.car.gos_number}</p>
+              <p><strong>Период аренды:</strong> {formatDateTime(activeContract.start_date, activeContract.end_date)}</p>
               <p><strong>Стоимость:</strong> {activeContract.total_cost} ₽</p>
             </>
           ) : (

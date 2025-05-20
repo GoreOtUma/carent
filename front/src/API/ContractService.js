@@ -15,4 +15,9 @@ export default class ContractService {
     const res = await api.post("contracts", contractData);
     return res.data;
   }
+  static async updateStatus(id_contr, data) {
+    const res = await api.put(`contracts/${id_contr}`, data); // Предположим, что это правильный путь
+    return res.data;
+  }
 }
+
