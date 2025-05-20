@@ -135,8 +135,13 @@ const ArchiveWorker = () => {
               <div className="additional-left additional-left-many">
                 <div>{contract.id_contr}</div>
                 <div>{contract.total_cost} ₽</div>
-                {activeTab === 'current' ? (
+                {activeTab === 'current' && contract.status?.toLowerCase() === 'approved'? (
                   <MyButton className="close-button">Закрыть аренду</MyButton>
+                ) : (
+                  <MyButton className="fixion-button" />
+                )}
+                {activeTab === 'current' && contract.status?.toLowerCase() === 'created'? (
+                  <MyButton className="close-button">Подтвердить аренду</MyButton>
                 ) : (
                   <MyButton className="fixion-button" />
                 )}
