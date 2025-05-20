@@ -27,8 +27,9 @@ const ArchiveUser = () => {
       setError(null);
       try {
         const data = await ContractService.getById(user.id);
-        setContracts(data);
-        setFilteredContracts(data); // Начальное состояние — все контракты
+        const clos = data.filter(contracts => contracts.status === "closed");
+        setContracts(clos);
+        setFilteredContracts(clos); // Начальное состояние — все контракты
       } catch (err) {
         setError('Ошибка при загрузке контрактов');
       } finally {

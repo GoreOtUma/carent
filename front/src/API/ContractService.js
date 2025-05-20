@@ -10,4 +10,9 @@ export default class ContractService {
     const res = await api.get(`/users/${user_id}/contracts`);
     return res.data;
   }  
+
+  static async create(contractData) {
+    const res = await api.post("contracts", contractData);
+    return res.data;
+  }
 }

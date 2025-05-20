@@ -40,6 +40,20 @@ const MainPage = () => {
   // Получаем все машины и справочники один раз
   useEffect(() => {
     const fetchAll = async () => {
+      const carsFromServer = await CarService.getAll();
+  
+      // Отфильтруем только свободные машины
+      const freeCars = carsFromServer.filter(car => car.is_rented === "free");
+  
+      // Нормализуем: добавим поле `id`
+      const normalizedCars = freeCars.map(car => ({
+        ...car,
+        id: car.id_car // <== ключевой момент
+      }));
+  
+      setAllCars(normalizedCars);
+      setFilteredCars(normalizedCars);
+  
       const partialRange = (filters.dateFrom && !filters.dateTo) || (!filters.dateFrom && filters.dateTo);
       
       if (partialRange) {
@@ -68,7 +82,7 @@ const MainPage = () => {
       setBrands(await BrandService.getAll());
     };
     fetchAll();
-  }, [filters.dateFrom, filters.dateTo]);
+  }, []);
 
   // Фильтрация при изменении фильтров
   useEffect(() => {
