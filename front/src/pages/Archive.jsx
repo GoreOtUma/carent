@@ -106,6 +106,23 @@ const ArchiveWorker = () => {
 
   const displayContracts = getDisplayContracts();
 
+  const getStatusInRussian = (status) => {
+    if (!status) return 'Неизвестный статус';
+    
+    switch(status.toLowerCase()) {
+      case 'created':
+        return 'Создан';
+      case 'approved':
+        return 'Подтвержден';
+      case 'closed':
+        return 'Закрыт';
+      case 'denied':
+        return 'Отклонен';
+      default:
+        return status; 
+    }
+  };
+
   return (
     <div className="archive-worker-page archive-page">
       <div className="archive-page-main">
@@ -158,7 +175,7 @@ const ArchiveWorker = () => {
             <div className="contract-card" key={contract.id_contr}>
               <div className="contract-card-main">
                 <div className="contract-brand">
-                  <strong>{contract.car.model.brand.name_brand} {contract.car.model.name_model}</strong>
+                  <strong>{contract.car.model.brand.name_brand} {contract.car.model.name_model}</strong> — <span>{getStatusInRussian(contract.status)}</span>
                 </div>
                 <div>
                   {contract.user.l_name} {contract.user.name} {contract.user.f_name}
