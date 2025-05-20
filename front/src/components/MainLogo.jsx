@@ -9,9 +9,14 @@ export const MainLogo = ({className = "", ...props}) => {
   const handleRedirect = () => {
     if (!localStorage.getItem("auth")) {
       navigate('/signin');
-    }
-    else {
-      navigate('/mainpage');
+    } else {
+      const userData = JSON.parse(localStorage.getItem("user"));
+      
+      if (userData?.role === "worker") {
+        navigate('/mainpageworker');
+      } else {
+        navigate('/mainpage');
+      }
     }
   };
   return (

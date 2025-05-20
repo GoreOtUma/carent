@@ -42,7 +42,12 @@ const SignIn = () => {
         // Сохраняем объект пользователя целиком
         localStorage.setItem("user", JSON.stringify(userData));
         setUser(userData); // Обновляем контекст
-        navigate('/mainpage');
+        if (userRole === "user") {
+          navigate('/mainpage');
+        }
+        else {
+          navigate('/mainpageworker');
+        }
       }      
     } catch (error) {
       console.error(error.response?.data || error);
