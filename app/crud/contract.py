@@ -5,6 +5,9 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload, joinedload
 from models.user import Contract, Car
 from schemas.contract import ContractCreate, ContractUpdate
+from models.user import Car, ReturnCar  # Уточни путь
+from schemas.returncar import ReturnCarCreate  # Уточни путь
+from datetime import datetime
 
 
 async def create_contract(data: ContractCreate, db: AsyncSession) -> Contract:
@@ -99,16 +102,36 @@ async def get_all_contracts(db: AsyncSession) -> List[Contract]:
     )
     return result.scalars().all()
 
+
+
 async def update_contract(contract_id: int, data: ContractUpdate, db: AsyncSession) -> Optional[Contract]:
     contract = await get_contract(contract_id, db)
     if not contract:
         return None
-    
+
     update_data = data.model_dump(exclude_unset=True)
+    change_type = update_data.pop("change_type", None)
+
     for field, value in update_data.items():
         setattr(contract, field, value)
-    
+
     try:
+        # Явно загружаем машину из БД
+        car = await db.get(Car, contract.id_car)
+
+        if change_type == "approve":
+            car.is_rented = "inrent"
+
+        elif change_type == "close":
+            car.is_rented = "free"
+            return_data = ReturnCar(
+                id_car=contract.id_car,
+                id_user=contract.id_user,
+                id_contr=contract.id_contr,
+                date_return=datetime.utcnow()
+            )
+            db.add(return_data)
+
         await db.commit()
         await db.refresh(contract)
     except Exception as e:
@@ -117,7 +140,9 @@ async def update_contract(contract_id: int, data: ContractUpdate, db: AsyncSessi
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Ошибка при обновлении контракта: {str(e)}"
         )
+
     return contract
+
 
 async def delete_contract(contract_id: int, db: AsyncSession) -> bool:
     contract = await get_contract(contract_id, db)

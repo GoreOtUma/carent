@@ -26,6 +26,7 @@ class ContractUpdate(BaseModel):
     total_cost: Optional[float] = None
     id_ins: Optional[int] = None
     status: Optional[str] = Field(None, max_length=50)
+    change_type: Optional[str] = None  # "approve" | "close"
     
     class Config:
         from_attributes = True
